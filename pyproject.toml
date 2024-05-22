@@ -1,0 +1,30 @@
+[build-system]
+requires = ["setuptools"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "Peelpreter"
+description = "A interpreter written in Python for the language, Monkey"
+readme = "README.md"
+authors = [
+    {name = "Jeebak Samajdwar"}
+]
+maintainers = [
+    {name = "Jeebak Samajdwar"}
+]
+license = {text = "GPL"}
+requires-python = ">= 3.10"
+dynamic = ["version"]
+keywords = ["monkey", "interpreter", "ast", "treewalker", "vm", "programing language", "language"]
+
+[tool.setuptools.packages.find]
+where = ["src"]
+include = ["peelpreter*"]
+exclude = ["peelpreter.*.__pycache__", "peelpreter.__pycache__"]
+
+[project.scripts]
+monkey = "peelpreter.__main__:main"
+
+[tool.setuptools.dynamic]
+version = {attr = "peelpreter.__version__"}
+

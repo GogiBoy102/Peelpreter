@@ -1,0 +1,25 @@
+let cache = {}
+
+let fibbonaci = fn(index) {
+    if (index < 3) {
+        return 1
+    }
+    else {
+        let cached = cache[index - 1]
+        if (!(cached == null)) {
+            let left = cached
+        } else {
+            let left = fibbonaci(index - 1)
+            let cache[index - 1] = left
+        }
+        let cached = cache[index - 2]
+        if (!(cached == null)) {
+            let right = cached
+        } else {
+            let right = fibbonaci(index - 2)
+            let cache[index - 1] = right
+        }
+        return left + right
+    }
+}
+puts(fibbonaci(10))
