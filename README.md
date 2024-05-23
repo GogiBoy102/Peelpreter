@@ -32,7 +32,29 @@ They are:-
     7. Extension modules using Python
 
 ### Installation
-Lorem Ipsum
+For installation of the package run,
+```
+pip install peelpreter
+```
+Or if you would prefer to build and install yourself, clone the repository and cd into it,
+```
+git clone https://github.com/GogiBoy102/Peelpreter.git
+cd Peelpreter
+```
+then run,
+```
+python3 -m build
+```
+If `build` is not already installed onto the system then install it with,
+```
+pip install --upgrade build
+```
+After the build process end, cd into `dist` and install the tar with,
+```
+cd dist
+pip install peelpreter-<version>.tar.gz
+```
+And, voila! Peelpreter has been installed! For usage, follow the next section.
 
 ### Usage
 Peelpreter comes with a script called `monkey` which is the entry point for the interpreter and also the reccomended way for it to be used.
