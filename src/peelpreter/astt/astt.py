@@ -36,7 +36,7 @@ class Statement(Node):
         return f"{self.literal}"
 
 class BlockStatement(Statement):
-    def __init__(self, token, statements) -> None:
+    def __init__(self, token: ttype.Token, statements: list[Statement]) -> None:
         super().__init__(token.string)
         self.token = token
         self.statements = statements
@@ -93,7 +93,7 @@ class String(Expression):
         return "\"" + self.string + "\""
 
 class Boolean(Expression):
-    def __init__(self, token, value: bool) -> None:
+    def __init__(self, token: ttype.Token, value: bool) -> None:
         super().__init__(token.string)
         self.token = token
         self.value = value
