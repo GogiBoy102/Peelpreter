@@ -33,6 +33,9 @@ classifiers = [
     "Typing :: Typed"
 ]
 
+[project.urls]
+Repository = "https://github.com/GogiBoy102/Peelpreter"
+
 [tool.setuptools.packages.find]
 where = ["src"]
 include = ["peelpreter*"]
