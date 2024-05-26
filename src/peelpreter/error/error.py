@@ -18,6 +18,11 @@
 #    along with this program.  If not, see <https://www.gnu.org/licenses/>.
 ########################################################################################
 
+from typing import TYPE_CHECKING
+
+if TYPE_CHECKING:
+    from ..token_type import Token
+
 class Error:
     def __init__(self, fname: str, errtype: str, info: str, location: tuple[int, int]) -> None:
         self.fname = fname
@@ -37,7 +42,7 @@ class UnexpectedToken(Error):
         super().__init__(fname, "UnexpectedToken", f"expected token {expected_token}, got {got_token}", location)
 
 class NoPrefixFunc(Error):
-    def __init__(self, fname: str, token, location: tuple[int, int]) -> None:
+    def __init__(self, fname: str, token: "Token", location: tuple[int, int]) -> None:
         super().__init__(fname, "NoPrefixFunc", f"no prefix function for parsing {token.string} found", location)
 
 class TypeMismatch(Error):
