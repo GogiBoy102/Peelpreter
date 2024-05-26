@@ -45,10 +45,6 @@ class NoPrefixFunc(Error):
     def __init__(self, fname: str, token: "Token", location: tuple[int, int]) -> None:
         super().__init__(fname, "NoPrefixFunc", f"no prefix function for parsing {token.string} found", location)
 
-class TypeMismatch(Error):
-    def __init__(self, fname: str, operator, left_type, right_type, location: tuple[int, int]) -> None:
-        super().__init__(fname, "TypeMismatch", f"Type mismatched in expression with operator: {operator} between {left_type} and {right_type}", location)
-
 class UnknownOperator(Error):
     def __init__(self, fname: str, operator, left_type, right_type, location: tuple[int, int]) -> None:
         if left_type is not None:
