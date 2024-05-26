@@ -33,7 +33,7 @@ class IllegalCharErr(Error):
         super().__init__(fname, "IllegalCharErr", f"illegal charecter '{char}'", location)
 
 class UnexpectedToken(Error):
-    def __init__(self, fname: str, expected_token, got_token, location: tuple[int, int]) -> None:
+    def __init__(self, fname: str, expected_token: str, got_token: str, location: tuple[int, int]) -> None:
         super().__init__(fname, "UnexpectedToken", f"expected token {expected_token}, got {got_token}", location)
 
 class NoPrefixFunc(Error):
