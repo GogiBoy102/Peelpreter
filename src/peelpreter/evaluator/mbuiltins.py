@@ -33,7 +33,7 @@ def m_len(fname, args):
     elif type(args[0]) == obj.Array:
         return obj.Number(len(args[0].elements))
     else:
-        return obj.Error(error.UnsupportedType(fname, type(args[0]), "len", (-1, -1)))
+        return obj.Error(error.UnsupportedType(fname, args[0], "len", (-1, -1)))
 
 
 def m_type(fname, args):
@@ -57,7 +57,7 @@ def m_push(fname, args):
     if len(args) != 2:
         return obj.Error(error.ArgumentError(fname, 2, len(args), "push", (-1, -1)))
     if args[0].type() != obj.OBJ_ARRAY:
-        return obj.Error(error.UnsupportedType(fname, args[0].type(), "push", (-1, -1)))
+        return obj.Error(error.UnsupportedType(fname, args[0], "push", (-1, -1)))
     arr = args[0].elements
     arr.append(args[1])
 
@@ -76,7 +76,7 @@ def m_tail(fname, args):
         _, *tail = string
         return obj.String(string)
     else:
-        return obj.Error(error.UnsupportedType(fname, args[0].type(), "tail", (-1, -1)))
+        return obj.Error(error.UnsupportedType(fname, args[0], "tail", (-1, -1)))
 
 def m_head(fname, args):
     if len(args) != 1:
@@ -90,7 +90,7 @@ def m_head(fname, args):
         head, *_ = string
         return obj.String([head])
     else:
-        return obj.Error(error.UnsupportedType(fname, args[0].type(), "head", (-1, -1)))
+        return obj.Error(error.UnsupportedType(fname, args[0], "head", (-1, -1)))
 
 def m_first(fname, args):
     if len(args) != 1:
@@ -104,7 +104,7 @@ def m_first(fname, args):
         start = string[0]
         return start
     else:
-        return obj.Error(error.UnsupportedType(fname, args[0].type(), "first", (-1, -1)))
+        return obj.Error(error.UnsupportedType(fname, args[0], "first", (-1, -1)))
 
 def m_last(fname, args):
     if len(args) != 1:
@@ -118,15 +118,15 @@ def m_last(fname, args):
         end = arr[-1]
         return end
     else:
-        return obj.Error(error.UnsupportedType(fname, args[0].type(), "last", (-1, -1)))
+        return obj.Error(error.UnsupportedType(fname, args[0], "last", (-1, -1)))
 
 def m_insert(fname, args):
     if len(args) != 3:
         return arg_error(fname, 1, len(args), "insert")
     if args[0].type() != obj.OBJ_ARRAY:
-       return obj.Error(error.UnsupportedType(fname, args[0].type(), "insert", (-1, -1)))
+       return obj.Error(error.UnsupportedType(fname, args[0], "insert", (-1, -1)))
     elif args[1].type() != obj.OBJ_NUM:
-        return obj.Error(error.UnsupportedType(fname, args[0].type(), "insert", (-1, -1)))
+        return obj.Error(error.UnsupportedType(fname, args[0], "insert", (-1, -1)))
     arr = args[0].elements.copy()
     if len(arr) < args[1].value:
         arr = arr + [obj.NULL] * (int(args[1].value) - len(arr))
@@ -138,9 +138,9 @@ def m_change(fname, args):
     if len(args) != 3:
         return arg_error(fname, 1, len(args), "change")
     elif args[0].type() != obj.OBJ_ARRAY:
-       return obj.Error(error.UnsupportedType(fname, args[0].type(), "change", (-1, -1)))
+       return obj.Error(error.UnsupportedType(fname, args[0], "change", (-1, -1)))
     elif args[1].type() != obj.OBJ_NUM:
-        return obj.Error(error.UnsupportedType(fname, args[0].type(), "change", (-1, -1)))
+        return obj.Error(error.UnsupportedType(fname, args[0], "change", (-1, -1)))
     
     arr = args[0].elements.copy()
     if args[1].value >= len(arr):

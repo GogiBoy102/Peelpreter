@@ -18,10 +18,11 @@
 #    along with this program.  If not, see <https://www.gnu.org/licenses/>.
 ########################################################################################
 
-from typing import TYPE_CHECKING
+from typing import TYPE_CHECKING, Union
 
 if TYPE_CHECKING:
     from ..token_type import Token
+    from ..objectt import Object
 
 class Error:
     def __init__(self, fname: str, errtype: str, info: str, location: tuple[int, int]) -> None:
@@ -46,7 +47,7 @@ class NoPrefixFunc(Error):
         super().__init__(fname, "NoPrefixFunc", f"no prefix function for parsing {token.string} found", location)
 
 class UnknownOperator(Error):
-    def __init__(self, fname: str, operator, left_type, right_type, location: tuple[int, int]) -> None:
+    def __init__(self, fname: str, operator: str, left_type: Union[str, None], right_type: str, location: tuple[int, int]) -> None:
         if left_type is not None:
             super().__init__(fname, "UnknownOperator", f"unknown operator: {operator} between {left_type} and {right_type}", location)
         else:
@@ -57,7 +58,7 @@ class UnknownIdentifier(Error):
         super().__init__(fname, "UnknownIdentifier", f"unknown identifier '{name}'", location)
 
 class NotAFunction(Error):
-    def __init__(self, fname: str, obj, location: tuple[int, int]) -> None:
+    def __init__(self, fname: str, obj: "Object", location: tuple[int, int]) -> None:
         super().__init__(fname, "NotAFunction", f"{obj.type()} is not a function", location)
 
 class UnexpectedEOF(Error):
@@ -65,24 +66,24 @@ class UnexpectedEOF(Error):
         super().__init__(fname, "UnexpectedEOF", "sudden unexpected EOF token encountered", location)
 
 class ArgumentError(Error):
-    def __init__(self, fname: str, expected, got, func, location: tuple[int, int]) -> None:
+    def __init__(self, fname: str, expected: int, got: int, func: str, location: tuple[int, int]) -> None:
         super().__init__(fname, "ArgumentError", f"wrong number of arguments, expected {expected} but got {got} for function {func}", location)
 
 class UnsupportedType(Error):
-    def __init__(self, fname: str, got, func, location: tuple[int, int]) -> None:
-        super().__init__(fname, "UnsupportedType", f"argument of type {got} not supported for function {func}", location)
+    def __init__(self, fname: str, got: "Object", func: str, location: tuple[int, int]) -> None:
+        super().__init__(fname, "UnsupportedType", f"argument of type {got.type()} not supported for function {func}", location)
 
 class UnsupportedIndexAccessType(Error):
-    def __init__(self, fname: str, type, location: tuple[int, int]) -> None:
-        super().__init__(fname, "UnsupportedIndexAccessType", f"{type} not supported for index access expressions", location)
+    def __init__(self, fname: str, type: "Object", location: tuple[int, int]) -> None:
+        super().__init__(fname, "UnsupportedIndexAccessType", f"{type.type()} not supported for index access expressions", location)
 
 class UnsupportedIndexType(Error):
-    def __init__(self, fname: str, got, location: tuple[int, int]) -> None:
-        super().__init__(fname, "UnsupportedIndexType", f"index of type {got} is not supported for array", location)
+    def __init__(self, fname: str, got: "Object", location: tuple[int, int]) -> None:
+        super().__init__(fname, "UnsupportedIndexType", f"index of type {got.type()} is not supported for array", location)
 
 class UnsupporteKeyType(Error):
-    def __init__(self, fname: str, type, location: tuple[int, int]) -> None:
-        super().__init__(fname, "UnsupportedKeyType", f"unsupported type {type} as key", location)
+    def __init__(self, fname: str, type: "Object", location: tuple[int, int]) -> None:
+        super().__init__(fname, "UnsupportedKeyType", f"unsupported type {type.type()} as key", location)
 
 class UnknownNode(Error):
     def __init__(self, fname: str, location: tuple[int, int]) -> None:

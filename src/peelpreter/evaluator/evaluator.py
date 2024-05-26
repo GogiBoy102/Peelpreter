@@ -75,7 +75,7 @@ def evaluate(
 
         return result
 
-    def eval_prefixexpr(operator, right):
+    def eval_prefixexpr(operator: str, right):
         match operator:
             case "!":
                 return eval_bang(right)
@@ -184,13 +184,13 @@ def evaluate(
         elif left.type() == obj.OBJ_HASH:
             return eval_hash_indexexpr(left, indexexpr)
         elif indexexpr.type() != obj.OBJ_NUM:
-            return obj.Error(error.UnsupportedIndexType(fname, indexexpr.type(), (-1, -1)))
+            return obj.Error(error.UnsupportedIndexType(fname, indexexpr, (-1, -1)))
         else:
-            return obj.Error(error.UnsupportedIndexAccessType(fname, left.type(), (-1, -1)))
+            return obj.Error(error.UnsupportedIndexAccessType(fname, left, (-1, -1)))
 
     def eval_hash_indexexpr(hash, indexexpr):
         if not isinstance(indexexpr, obj.Hashable):
-            return obj.Error(error.UnsupporteKeyType(fname, indexexpr.type(), (-1, -1)))
+            return obj.Error(error.UnsupporteKeyType(fname, indexexpr, (-1, -1)))
         pair = hash.pairs.get(indexexpr.hash_key())
         if pair is None:
             return obj.NULL
@@ -198,7 +198,7 @@ def evaluate(
 
     def eval_hash_reassign(hash, key, value):
         if not isinstance(key, obj.Hashable):
-            return obj.Error(error.UnsupporteKeyType(fname, key.type(), (-1, -1)))
+            return obj.Error(error.UnsupporteKeyType(fname, key, (-1, -1)))
 
         hash.pairs[key.hash_key()] = obj.HashPair(key, value)
 
