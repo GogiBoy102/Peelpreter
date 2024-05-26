@@ -1,4 +1,4 @@
-########################################################################################
+##############################################################################
 #    Peelpreter is a interpreter designed to interpret the language, Monkey.
 #    Copyright (C) 2024 Jeebak Samajdwar
 #
@@ -16,7 +16,7 @@
 #
 #    You should have received a copy of the GNU General Public License
 #    along with this program.  If not, see <https://www.gnu.org/licenses/>.
-########################################################################################
+##############################################################################
 
 from sys import setrecursionlimit
 from typing import Union
@@ -30,10 +30,8 @@ from .. import objectt as obj
 setrecursionlimit(10**6)
 
 
-def evaluate(
-    node: astt.Node, env: Enviroment, fname="stdin"
-) -> obj.Object:
-    def istruthy(cond_object):
+def evaluate(node: astt.Node, env: Enviroment, fname="stdin") -> obj.Object:
+    def istruthy(cond_object: obj.Object):
         if cond_object == obj.NULL:
             return False
         elif cond_object == obj.TRUE:
@@ -43,7 +41,7 @@ def evaluate(
         else:
             return True
 
-    def is_error(tobject):
+    def is_error(tobject: obj.Object):
         if tobject is not None:
             return tobject.type() == obj.OBJ_ERROR
         return False
@@ -53,9 +51,9 @@ def evaluate(
         for statement in statements:
             result = evaluate(statement, env)
 
-            if type(result) == obj.ReturnValue:
+            if isinstance(result, obj.ReturnValue):
                 return result.value
-            elif type(result) == obj.Error:
+            elif isinstance(result, obj.Error):
                 return result
 
         return result
@@ -82,8 +80,8 @@ def evaluate(
             case "-":
                 return eval_minus(right)
             case _:
-                return obj.Error(error.
-                    UnknownOperator(fname, operator, None, right.type(), (-1, -1))
+                return obj.Error(
+                    error.UnknownOperator(fname, operator, None, right.type(), (-1, -1))
                 )
 
     def eval_infixexpr(operator, left, right):
@@ -96,8 +94,10 @@ def evaluate(
         elif operator == "!=":
             return obj.TRUE if left != right else obj.FALSE
         else:
-            return obj.Error(error.
-                UnknownOperator(fname, operator, left.type(), right.type(), (-1, -1))
+            return obj.Error(
+                error.UnknownOperator(
+                    fname, operator, left.type(), right.type(), (-1, -1)
+                )
             )
 
     def eval_num_infixexpr(operator, left, right):
@@ -122,16 +122,18 @@ def evaluate(
             case "!=":
                 return obj.TRUE if leftval != rightval else obj.FALSE
             case _:
-                return obj.Error(error.
-                    UnknownOperator(
+                return obj.Error(
+                    error.UnknownOperator(
                         fname, operator, left.type(), right.type(), (-1, -1)
                     )
                 )
 
     def eval_str_infixexpr(operator, left, right):
         if operator != "+":
-            return obj.Error(error.
-                UnknownOperator(fname, operator, left.type(), right.type(), (-1, -1))
+            return obj.Error(
+                error.UnknownOperator(
+                    fname, operator, left.type(), right.type(), (-1, -1)
+                )
             )
         left_val = left.value
         right_val = right.value
@@ -168,8 +170,8 @@ def evaluate(
             if is_error(key):
                 return key
             if not isinstance(key, obj.Hashable):
-                return obj.Error(error.UnsupporteKeyType(fname, key.type(), (-1, -1)))
- 
+                return obj.Error(error.UnsupporteKeyType(fname, key, (-1, -1)))
+
             value = evaluate(val_node, env)
             if is_error(value):
                 return value
@@ -234,8 +236,10 @@ def evaluate(
         return obj.Error(error.UnknownIdentifier(fname, node.literal, (-1, -1)))
 
     def eval_minus(right):
-        if type(right) != obj.Number:
-            return obj.Error(error.UnknownOperator(fname, "-", None, right.type(), (-1, -1)))
+        if isinstance(right, obj.Number):
+            return obj.Error(
+                error.UnknownOperator(fname, "-", None, right.type(), (-1, -1))
+            )
         value = right.value
         return obj.Number(-value)
 
@@ -250,11 +254,11 @@ def evaluate(
             return obj.FALSE
 
     def apply_func(func, arguments):
-        if type(func) == obj.Function:
+        if isinstance(func, obj.Function):
             extended_env = extend_funcenv(func, arguments)
             evaluated = evaluate(func.body, extended_env)
             return unwrap_rtrvalue(evaluated)
-        elif type(func) == obj.Builtin:
+        elif isinstance(func, obj.Builtin):
             return func.func(fname, arguments)
 
         return obj.Error(error.NotAFunction(fname, func, (-1, -1)))
@@ -266,20 +270,21 @@ def evaluate(
         return env
 
     def unwrap_rtrvalue(tobject):
-        if type(tobject) == obj.ReturnValue:
+        if isinstance(tobject, obj.ReturnValue):
             return tobject.value
         return tobject
 
-    if type(node) == astt.Program:
-        return eval_program(node.statements)
-    elif type(node) == astt.ExpressionStatement:
+    if isinstance(node, astt.Program):
+        program: astt.Program = node
+        return eval_program(program.statements)
+    elif isinstance(node, astt.ExpressionStatement):
         return evaluate(node.expression, env)
-    elif type(node) == astt.PrefixExpression:
+    elif isinstance(node, astt.PrefixExpression):
         rightexpr = evaluate(node.rightexpr, env)
         if is_error(rightexpr):
             return rightexpr
         return eval_prefixexpr(node.operator, rightexpr)
-    elif type(node) == astt.InfixExpression:
+    elif isinstance(node, astt.InfixExpression):
         left = evaluate(node.leftexpr, env)
         if is_error(left):
             return left
@@ -287,13 +292,13 @@ def evaluate(
         if is_error(right):
             return right
         return eval_infixexpr(node.operator, left, right)
-    elif type(node) == astt.BlockStatement:
+    elif isinstance(node, astt.BlockStatement):
         return eval_blockstmt(node)
-    elif type(node) == astt.FunctionLiteral:
+    elif isinstance(node, astt.FunctionLiteral):
         parametres = node.parameters
         body = node.body
         return obj.Function(parametres, body, env)
-    elif type(node) == astt.CallExpression:
+    elif isinstance(node, astt.CallExpression):
         function = evaluate(node.function, env)
         if is_error(function):
             return function
@@ -301,14 +306,14 @@ def evaluate(
         if len(arguments) == 1 and is_error(arguments[0]):
             return arguments[0]
         return apply_func(function, arguments)
-    elif type(node) == astt.HashLiteral:
+    elif isinstance(node, astt.HashLiteral):
         return eval_hashlit(node, env)
-    elif type(node) == astt.ArrayLiteral:
+    elif isinstance(node, astt.ArrayLiteral):
         elements = eval_exprs(node.elements, env)
         if len(elements) == 1 and is_error(elements[0]):
             return elements[0]
         return obj.Array(elements)
-    elif type(node) == astt.IndexExpression:
+    elif isinstance(node, astt.IndexExpression):
         leftexpr = evaluate(node.left, env)
         if is_error(leftexpr):
             return leftexpr
@@ -316,20 +321,20 @@ def evaluate(
         if is_error(indexexpr):
             return indexexpr
         return eval_indexexpr(leftexpr, indexexpr)
-    elif type(node) == astt.IfExpression:
+    elif isinstance(node, astt.IfExpression):
         return eval_ifexpr(node)
-    elif type(node) == astt.ReturnStatement:
+    elif isinstance(node, astt.ReturnStatement):
         value = evaluate(node.valuexp, env)
         if is_error(value):
             return value
         return obj.ReturnValue(value)
-    elif type(node) == astt.LetStatement:
+    elif isinstance(node, astt.LetStatement):
         value = evaluate(node.value, env)
         if is_error(value):
             return value
         env.set_iden(name=node.name.literal, value=value)
         return value
-    elif type(node) == astt.ReassignmentStatement:
+    elif isinstance(node, astt.ReassignmentStatement):
         structure = evaluate(node.index_expr.left, env)
         index = evaluate(node.index_expr.index, env)
         value = evaluate(node.value, env)
@@ -340,17 +345,17 @@ def evaluate(
         else:
             return obj.Error("Unsupported")
 
-    elif type(node) == astt.Identifier:
+    elif isinstance(node, astt.Identifier):
         return eval_identifier(node, env)
-    elif type(node) == astt.Number:
+    elif isinstance(node, astt.Number):
         return obj.Number(node.value)
-    elif type(node) == astt.String:
+    elif isinstance(node, astt.String):
         return obj.String(node.string)
-    elif type(node) == astt.Boolean:
+    elif isinstance(node, astt.Boolean):
         if node.value:
             return obj.TRUE
         return obj.FALSE
-    elif type(node) == astt.Null:
+    elif isinstance(node, astt.Null):
         return obj.NULL
 
     return obj.Error(error.UnknownNode(fname, (-1, -1)))
