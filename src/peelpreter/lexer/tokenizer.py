@@ -98,65 +98,63 @@ def tokenize(source: str, fname: str = "stdin") -> list[ttoken.Token]:
         column += 1
         current = source[position]
 
-        match current:
-            case "=":
-                if peek(position) == "=" and peek(position) != "":
-                    position = advance(position)
-                    add_token(ttoken.TT_EQ, "==", tokens)
-                    continue
-                add_token(ttoken.TT_ASSIGN, current, tokens)
-            case "+":
-                add_token(ttoken.TT_PLUS, current, tokens)
-            case "-":
-                add_token(ttoken.TT_MINUS, current, tokens)
-            case "/":
-                add_token(ttoken.TT_SLASH, current, tokens)
-            case "*":
-                add_token(ttoken.TT_ASTERISK, current, tokens)
-            case "!":
-                if peek(position) == "=":
-                    position = advance(position)
-                    add_token(ttoken.TT_NTEQ, "!=", tokens)
-                    continue
-                add_token(ttoken.TT_BANG, current, tokens)
-            case "<":
-                add_token(ttoken.TT_LT, current, tokens)
-            case ">":
-                add_token(ttoken.TT_GT, current, tokens)
-            case "(":
-                add_token(ttoken.TT_LPAREN, current, tokens)
-            case ")":
-                add_token(ttoken.TT_RPAREN, current, tokens)
-            case "{":
-                add_token(ttoken.TT_LBRACE, current, tokens)
-            case "}":
-                add_token(ttoken.TT_RBRACE, current, tokens)
-            case "[":
-                add_token(ttoken.TT_LBRACKET, current, tokens)
-            case "]":
-                add_token(ttoken.TT_RBRACKET, current, tokens)
-            case ",":
-                add_token(ttoken.TT_COMMA, current, tokens)
-            case ":":
-                add_token(ttoken.TT_COLON, current, tokens)
-            case " ":
+        if current == "=":
+            if peek(position) == "=" and peek(position) != "":
+                position = advance(position)
+                add_token(ttoken.TT_EQ, "==", tokens)
                 continue
-            case "\t":
+            add_token(ttoken.TT_ASSIGN, current, tokens)
+        elif current == "+":
+            add_token(ttoken.TT_PLUS, current, tokens)
+        elif current == "-":
+            add_token(ttoken.TT_MINUS, current, tokens)
+        elif current == "/":
+            add_token(ttoken.TT_SLASH, current, tokens)
+        elif current == "*":
+            add_token(ttoken.TT_ASTERISK, current, tokens)
+        elif current == "!":
+            if peek(position) == "=":
+                position = advance(position)
+                add_token(ttoken.TT_NTEQ, "!=", tokens)
                 continue
-            case "\n":
-                column = 1
-                line += 1
-            case ";":
-                add_token(ttoken.TT_SEMICOLON, current, tokens)
-            case "\"":
-                position = handle_str(position, current, tokens, line, column)
-            case _:
-                if current.isalpha():
-                    position = handle_indentifier(position, current, tokens)
-                elif current.isdigit():
-                    position = handle_num(position, current, tokens)
-                else:
-                    add_err(IllegalCharErr(fname, current, (line, column)), current, tokens)
+            add_token(ttoken.TT_BANG, current, tokens)
+        elif current == "<":
+            add_token(ttoken.TT_LT, current, tokens)
+        elif current == ">":
+            add_token(ttoken.TT_GT, current, tokens)
+        elif current == "(":
+            add_token(ttoken.TT_LPAREN, current, tokens)
+        elif current == ")":
+            add_token(ttoken.TT_RPAREN, current, tokens)
+        elif current == "{":
+            add_token(ttoken.TT_LBRACE, current, tokens)
+        elif current == "}":
+            add_token(ttoken.TT_RBRACE, current, tokens)
+        elif current == "[":
+            add_token(ttoken.TT_LBRACKET, current, tokens)
+        elif current == "]":
+            add_token(ttoken.TT_RBRACKET, current, tokens)
+        elif current == ",":
+            add_token(ttoken.TT_COMMA, current, tokens)
+        elif current == ":":
+            add_token(ttoken.TT_COLON, current, tokens)
+        elif current == " ":
+            continue
+        elif current == "\t":
+            continue
+        elif current == "\n":
+            column = 1
+            line += 1
+        elif current == ";":
+            add_token(ttoken.TT_SEMICOLON, current, tokens)
+        elif current == "\"":
+            position = handle_str(position, current, tokens, line, column)
+        elif current.isalpha():
+            position = handle_indentifier(position, current, tokens)
+        elif current.isdigit():
+            position = handle_num(position, current, tokens)
+        else:
+            add_err(IllegalCharErr(fname, current, (line, column)), current, tokens)
                     
     add_token(ttoken.TT_EOF, "", tokens)
 

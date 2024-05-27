@@ -74,15 +74,14 @@ def evaluate(node: astt.Node, env: Enviroment, fname="stdin") -> obj.Object:
         return result
 
     def eval_prefixexpr(operator: str, right):
-        match operator:
-            case "!":
-                return eval_bang(right)
-            case "-":
-                return eval_minus(right)
-            case _:
-                return obj.Error(
-                    error.UnknownOperator(fname, operator, None, right.type(), (-1, -1))
-                )
+        if operator ==  "!":
+            return eval_bang(right)
+        elif operator ==  "-":
+            return eval_minus(right)
+        else:
+            return obj.Error(
+                error.UnknownOperator(fname, operator, None, right.type(), (-1, -1))
+            )
 
     def eval_infixexpr(operator, left, right):
         if left.type() == obj.OBJ_NUM and right.type() == obj.OBJ_NUM:
@@ -104,29 +103,28 @@ def evaluate(node: astt.Node, env: Enviroment, fname="stdin") -> obj.Object:
         leftval = left.value
         rightval = right.value
 
-        match operator:
-            case "+":
-                return obj.Number(leftval + rightval)
-            case "-":
-                return obj.Number(leftval - rightval)
-            case "*":
-                return obj.Number(leftval * rightval)
-            case "/":
-                return obj.Number(leftval / rightval)
-            case "<":
-                return obj.TRUE if leftval < rightval else obj.FALSE
-            case ">":
-                return obj.TRUE if leftval > rightval else obj.FALSE
-            case "==":
-                return obj.TRUE if leftval == rightval else obj.FALSE
-            case "!=":
-                return obj.TRUE if leftval != rightval else obj.FALSE
-            case _:
-                return obj.Error(
-                    error.UnknownOperator(
-                        fname, operator, left.type(), right.type(), (-1, -1)
-                    )
+        if operator == "+":
+            return obj.Number(leftval + rightval)
+        elif operator == "-":
+            return obj.Number(leftval - rightval)
+        elif operator == "*":
+            return obj.Number(leftval * rightval)
+        elif operator == "/":
+            return obj.Number(leftval / rightval)
+        elif operator == "<":
+            return obj.TRUE if leftval < rightval else obj.FALSE
+        elif operator == ">":
+            return obj.TRUE if leftval > rightval else obj.FALSE
+        elif operator == "==":
+            return obj.TRUE if leftval == rightval else obj.FALSE
+        elif operator == "!=":
+            return obj.TRUE if leftval != rightval else obj.FALSE
+        else:
+            return obj.Error(
+                error.UnknownOperator(
+                    fname, operator, left.type(), right.type(), (-1, -1)
                 )
+            )
 
     def eval_str_infixexpr(operator, left, right):
         if operator != "+":
