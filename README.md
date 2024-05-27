@@ -49,7 +49,7 @@ If `build` is not already installed onto the system then install it with,
 ```
 pip install --upgrade build
 ```
-After the build process end, cd into `dist` and install the tar with,
+After the build process ends, cd into `dist` and install the tar with,
 ```
 cd dist
 pip install peelpreter-<version>.tar.gz
