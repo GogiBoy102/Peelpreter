@@ -168,7 +168,7 @@ def evaluate(
             if is_error(key):
                 return key
             if not isinstance(key, obj.Hashable):
-                return obj.Error(error.UnsupporteKeyType(fname, key.type(), (-1, -1)))
+                return obj.Error(error.UnsupporteKeyType(fname, key, (-1, -1)))
  
             value = evaluate(val_node, env)
             if is_error(value):
