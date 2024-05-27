@@ -171,7 +171,6 @@ def evaluate(node: astt.Node, env: Enviroment, fname="stdin") -> obj.Object:
                 return key
             if not isinstance(key, obj.Hashable):
                 return obj.Error(error.UnsupporteKeyType(fname, key, (-1, -1)))
-
             value = evaluate(val_node, env)
             if is_error(value):
                 return value

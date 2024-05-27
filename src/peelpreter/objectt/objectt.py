@@ -43,7 +43,7 @@ class HashKey:
         if not isinstance(value, HashKey):
             return False
         return value.value == self.value
-    def __ne__(self, value: object, /) -> bool:
+    def __ne__(self, value: object) -> bool:
         if not isinstance(value, HashKey):
             return True
         return not value.value == self.value
