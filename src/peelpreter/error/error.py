@@ -18,7 +18,8 @@
 #    along with this program.  If not, see <https://www.gnu.org/licenses/>.
 ########################################################################################
 
-from typing import TYPE_CHECKING, Union
+from __future__ import annotations
+from typing import TYPE_CHECKING
 
 if TYPE_CHECKING:
     from ..token_type import Token
@@ -47,7 +48,7 @@ class NoPrefixFunc(Error):
         super().__init__(fname, "NoPrefixFunc", f"no prefix function for parsing {token.string} found", location)
 
 class UnknownOperator(Error):
-    def __init__(self, fname: str, operator: str, left_type: Union[str, None], right_type: str, location: tuple[int, int]) -> None:
+    def __init__(self, fname: str, operator: str, left_type: str | None, right_type: str, location: tuple[int, int]) -> None:
         if left_type is not None:
             super().__init__(fname, "UnknownOperator", f"unknown operator: {operator} between {left_type} and {right_type}", location)
         else:
