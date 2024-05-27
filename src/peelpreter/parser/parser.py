@@ -18,6 +18,7 @@
 #    along with this program.  If not, see <https://www.gnu.org/licenses/>.
 ########################################################################################
 
+from __future__ import annotations
 from typing import Callable, Union
 
 from peelpreter.astt.astt import ArrayLiteral, BlockStatement, Expression, IndexExpression, Statement

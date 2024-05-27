@@ -18,6 +18,7 @@
 #    along with this program.  If not, see <https://www.gnu.org/licenses/>.
 ########################################################################################
 
+from __future__ import annotations
 from ..error import Error, IllegalCharErr, UnexpectedEOF
 from .. import token_type as ttoken
 

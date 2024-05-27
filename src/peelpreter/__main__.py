@@ -18,6 +18,7 @@
 #    along with this program.  If not, see <https://www.gnu.org/licenses/>.
 ########################################################################################
 
+from __future__ import annotations
 import readline  # noqa: F401
 from sys import argv
 from typing import Optional, Union
