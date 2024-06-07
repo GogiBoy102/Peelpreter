@@ -1,9 +1,8 @@
-let extend = fn(first_arr, second_arr, index) {
-    if (index == len(second_arr)) {
-        return first_arr
+let sum = fn(arr, index) {
+    if (index == len(arr) - 1) {
+        return arr[index]
     }
-    push(first_arr, second_arr[index])
-    return extend(first_arr, second_arr, index + 1)
+    return arr[index] + sum(arr, index + 1)
 }
 
-puts(extend([8], [9], 0))
+puts(sum([6], 0))
