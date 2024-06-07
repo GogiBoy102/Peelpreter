@@ -42,12 +42,10 @@ def evaluate(node: astt.Node, env: Enviroment, fname="stdin") -> obj.Object:
         else:
             return True
 
-    def is_error(tobject: obj.Object):
-        if tobject is not None:
-            return tobject.type() == obj.OBJ_ERROR
-        return False
+    def is_error(tobject: obj.Object) -> bool:
+        return tobject.type() == obj.OBJ_ERROR
 
-    def eval_program(statements):
+    def eval_program(statements: list[astt.Statement]):
         result = obj.Object()
         for statement in statements:
             result = evaluate(statement, env)
@@ -74,7 +72,7 @@ def evaluate(node: astt.Node, env: Enviroment, fname="stdin") -> obj.Object:
 
         return result
 
-    def eval_prefixexpr(operator: str, right):
+    def eval_prefixexpr(operator: str, right: obj.Object) -> obj.Object:
         if operator ==  "!":
             return eval_bang(right)
         elif operator ==  "-":
@@ -84,10 +82,12 @@ def evaluate(node: astt.Node, env: Enviroment, fname="stdin") -> obj.Object:
                 error.UnknownOperator(fname, operator, None, right.type(), (-1, -1))
             )
 
-    def eval_infixexpr(operator, left, right):
+    def eval_infixexpr(operator: str, left: obj.Object, right: obj.Object) -> obj.Object:
         if left.type() == obj.OBJ_NUM and right.type() == obj.OBJ_NUM:
+            assert isinstance(left, obj.Number) and isinstance(right, obj.Number)
             return eval_num_infixexpr(operator, left, right)
         elif left.type() == obj.OBJ_STRING and right.type() == obj.OBJ_STRING:
+            assert isinstance(left, obj.String) and isinstance(right, obj.String)
             return eval_str_infixexpr(operator, left, right)
         elif operator == "==":
             return obj.TRUE if left == right else obj.FALSE
@@ -100,7 +100,7 @@ def evaluate(node: astt.Node, env: Enviroment, fname="stdin") -> obj.Object:
                 )
             )
 
-    def eval_num_infixexpr(operator, left, right):
+    def eval_num_infixexpr(operator: str, left: obj.Number, right: obj.Number) -> obj.Object:
         leftval = left.value
         rightval = right.value
 
@@ -127,7 +127,7 @@ def evaluate(node: astt.Node, env: Enviroment, fname="stdin") -> obj.Object:
                 )
             )
 
-    def eval_str_infixexpr(operator, left, right):
+    def eval_str_infixexpr(operator: str, left: obj.String, right: obj.String) -> obj.Object:
         if operator != "+":
             return obj.Error(
                 error.UnknownOperator(
@@ -139,7 +139,7 @@ def evaluate(node: astt.Node, env: Enviroment, fname="stdin") -> obj.Object:
 
         return obj.String(left_val + right_val)
 
-    def eval_exprs(expressions, env):
+    def eval_exprs(expressions: list[astt.Expression], env: Enviroment) -> list[obj.Object]:
         result = []
         for expression in expressions:
             evaluated = evaluate(expression, env)
@@ -149,7 +149,7 @@ def evaluate(node: astt.Node, env: Enviroment, fname="stdin") -> obj.Object:
 
         return result
 
-    def eval_ifexpr(ifelse):
+    def eval_ifexpr(ifelse: astt.IfExpression) -> obj.Object:
         condition = evaluate(ifelse.condition, env)
         if is_error(condition):
             return condition
@@ -161,7 +161,7 @@ def evaluate(node: astt.Node, env: Enviroment, fname="stdin") -> obj.Object:
         else:
             return obj.NULL
 
-    def eval_hashlit(node, env):
+    def eval_hashlit(node: astt.HashLiteral, env: Enviroment) -> obj.Object:
         pairs = dict()
 
         for key_node, val_node in node.pairs.items():
@@ -178,17 +178,19 @@ def evaluate(node: astt.Node, env: Enviroment, fname="stdin") -> obj.Object:
 
         return obj.Hash(pairs)
 
-    def eval_indexexpr(left, indexexpr):
+    def eval_indexexpr(left: obj.Object, indexexpr: obj.Object) -> obj.Object:
         if left.type() == obj.OBJ_ARRAY and indexexpr.type() == obj.OBJ_NUM:
+            assert isinstance(left, obj.Array) and isinstance(indexexpr, obj.Number)
             return eval_arr_indexexpr(left, indexexpr)
         elif left.type() == obj.OBJ_HASH:
+            assert isinstance(left, obj.Hash)
             return eval_hash_indexexpr(left, indexexpr)
         elif indexexpr.type() != obj.OBJ_NUM:
             return obj.Error(error.UnsupportedIndexType(fname, indexexpr, (-1, -1)))
         else:
             return obj.Error(error.UnsupportedIndexAccessType(fname, left, (-1, -1)))
 
-    def eval_hash_indexexpr(hash, indexexpr):
+    def eval_hash_indexexpr(hash: obj.Hash, indexexpr: obj.Object) -> obj.Object:
         if not isinstance(indexexpr, obj.Hashable):
             return obj.Error(error.UnsupporteKeyType(fname, indexexpr, (-1, -1)))
         pair = hash.pairs.get(indexexpr.hash_key())
@@ -196,7 +198,7 @@ def evaluate(node: astt.Node, env: Enviroment, fname="stdin") -> obj.Object:
             return obj.NULL
         return pair.value
 
-    def eval_hash_reassign(hash, key, value):
+    def eval_hash_reassign(hash: obj.Hash, key: obj.Object, value: obj.Object) -> obj.Object:
         if not isinstance(key, obj.Hashable):
             return obj.Error(error.UnsupporteKeyType(fname, key, (-1, -1)))
 
@@ -204,7 +206,7 @@ def evaluate(node: astt.Node, env: Enviroment, fname="stdin") -> obj.Object:
 
         return value
 
-    def eval_arr_indexexpr(array, indexexpr):
+    def eval_arr_indexexpr(array: obj.Array, indexexpr: obj.Number) -> obj.Object:
         index = int(indexexpr.value)
         maximum = len(array.elements) - 1
 
@@ -212,7 +214,7 @@ def evaluate(node: astt.Node, env: Enviroment, fname="stdin") -> obj.Object:
             return obj.NULL
         return array.elements[index]
 
-    def eval_arr_reassign(array, indexexpr, value):
+    def eval_arr_reassign(array: obj.Array, indexexpr: obj.Number, value: obj.Object) -> obj.Object:
         index = int(indexexpr.value)
         maximum = len(array.elements) - 1
 
@@ -337,6 +339,8 @@ def evaluate(node: astt.Node, env: Enviroment, fname="stdin") -> obj.Object:
         index = evaluate(node.index_expr.index, env)
         value = evaluate(node.value, env)
         if isinstance(structure, obj.Array):
+            if not isinstance(index, obj.Number):
+                return obj.Error("Type mismatch for index")
             return eval_arr_reassign(structure, index, value)
         elif isinstance(structure, obj.Hash):
             return eval_hash_reassign(structure, index, value)
