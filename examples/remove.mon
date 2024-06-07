@@ -1,0 +1,3 @@
+let remove = fn(string, filter, index) {
+    string[filter] + filter
+}
