@@ -1,0 +1,9 @@
+let extend = fn(first_arr, second_arr, index) {
+    if (index == len(second_arr)) {
+        return first_arr
+    }
+    push(first_arr, second_arr[index])
+    return extend(first_arr, second_arr, index + 1)
+}
+
+puts(extend([8], [9], 0))
