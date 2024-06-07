@@ -5,4 +5,4 @@ let sum = fn(arr, index) {
     return arr[index] + sum(arr, index + 1)
 }
 
-puts(sum([6], 0))
+puts(sum([1, 2, 3, 4, 5], 0))
