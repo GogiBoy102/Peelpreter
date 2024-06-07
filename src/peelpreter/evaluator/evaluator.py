@@ -225,7 +225,7 @@ def evaluate(node: astt.Node, env: Enviroment, fname="stdin") -> obj.Object:
 
         return value
 
-    def eval_identifier(node, env: Enviroment):
+    def eval_identifier(node: astt.Identifier, env: Enviroment) -> obj.Object:
         value = env.get(node.literal)
         if value is not None:
             return value
@@ -235,15 +235,15 @@ def evaluate(node: astt.Node, env: Enviroment, fname="stdin") -> obj.Object:
 
         return obj.Error(error.UnknownIdentifier(fname, node.literal, (-1, -1)))
 
-    def eval_minus(right):
-        if isinstance(right, obj.Number):
+    def eval_minus(right: obj.Object) -> obj.Object:
+        if not isinstance(right, obj.Number):
             return obj.Error(
                 error.UnknownOperator(fname, "-", None, right.type(), (-1, -1))
             )
         value = right.value
         return obj.Number(-value)
 
-    def eval_bang(right):
+    def eval_bang(right: obj.Object) -> obj.Object:
         if right == obj.TRUE:
             return obj.FALSE
         elif right == obj.FALSE:
@@ -253,7 +253,7 @@ def evaluate(node: astt.Node, env: Enviroment, fname="stdin") -> obj.Object:
         else:
             return obj.FALSE
 
-    def apply_func(func, arguments):
+    def apply_func(func: obj.Object, arguments: list[obj.Object]) -> obj.Object:
         if isinstance(func, obj.Function):
             extended_env = extend_funcenv(func, arguments)
             evaluated = evaluate(func.body, extended_env)
@@ -263,13 +263,13 @@ def evaluate(node: astt.Node, env: Enviroment, fname="stdin") -> obj.Object:
 
         return obj.Error(error.NotAFunction(fname, func, (-1, -1)))
 
-    def extend_funcenv(func: obj.Function, arguments):
+    def extend_funcenv(func: obj.Function, arguments: list[obj.Object]) -> Enviroment:
         env = Enviroment(func.env)
         for index, parameter in enumerate(func.parametres):
             env.set_iden(parameter.literal, arguments[index])
         return env
 
-    def unwrap_rtrvalue(tobject):
+    def unwrap_rtrvalue(tobject: obj.Object) -> obj.Object:
         if isinstance(tobject, obj.ReturnValue):
             return tobject.value
         return tobject
