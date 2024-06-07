@@ -140,7 +140,7 @@ class IfExpression(Expression):
         self.alternative = alternative
 
     def __repr__(self) -> str:
-        result = f"if {self.condition} {self.consequence}{' else '+ repr(self.alternative) if self.alternative.literal != '' else ''}"
+        result = f"if {self.condition} {self.consequence}{' else '+ repr(self.alternative) if self.alternative.literal != 'if' else ''}"
         return result
 
 class FunctionLiteral(Expression):

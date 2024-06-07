@@ -42,9 +42,7 @@ def evaluate(node: astt.Node, env: Enviroment, fname="stdin") -> obj.Object:
             return True
 
     def is_error(tobject: obj.Object):
-        if tobject is not None:
-            return tobject.type() == obj.OBJ_ERROR
-        return False
+        return tobject.type() == obj.OBJ_ERROR
 
     def eval_program(statements):
         result = obj.Object()
@@ -155,7 +153,9 @@ def evaluate(node: astt.Node, env: Enviroment, fname="stdin") -> obj.Object:
 
         if istruthy(condition):
             return evaluate(ifelse.consequence, env)
-        elif ifelse.alternative.literal != "":
+        elif ifelse.alternative.literal != "if":
+            print(ifelse)
+            print(ifelse.alternative.literal)
             return evaluate(ifelse.alternative, env)
         else:
             return obj.NULL
@@ -252,6 +252,8 @@ def evaluate(node: astt.Node, env: Enviroment, fname="stdin") -> obj.Object:
 
     def apply_func(func, arguments):
         if isinstance(func, obj.Function):
+            if len(arguments) != len(func.parametres):
+                return obj.Error("Mismatched number of args")
             extended_env = extend_funcenv(func, arguments)
             evaluated = evaluate(func.body, extended_env)
             return unwrap_rtrvalue(evaluated)
