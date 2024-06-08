@@ -45,7 +45,7 @@ def evaluate(node: astt.Node, env: Enviroment, fname="stdin") -> obj.Object:
     def is_error(tobject: obj.Object) -> bool:
         return tobject.type() == obj.OBJ_ERROR
 
-    def eval_program(statements: list[astt.Statement]):
+    def eval_program(statements: list[astt.Statement]) -> obj.Object:
         result = obj.Object()
         for statement in statements:
             result = evaluate(statement, env)
@@ -57,7 +57,7 @@ def evaluate(node: astt.Node, env: Enviroment, fname="stdin") -> obj.Object:
 
         return result
 
-    def eval_blockstmt(block: astt.BlockStatement):
+    def eval_blockstmt(block: astt.BlockStatement) -> obj.Object:
         result: Union[obj.Object, None] = obj.Object()
 
         for statement in block.statements:
