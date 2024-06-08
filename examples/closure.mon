@@ -1,0 +1,7 @@
+let mult_by = fn(multiplier) {
+    return fn(number) {number * multiplier}
+}
+
+let double = mult_by(2)
+
+puts(double(5))
