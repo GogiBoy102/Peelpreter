@@ -506,6 +506,7 @@ def parse(tokens: list[ttoken.Token], fname="stdin"):
         return astt.Null(token), index
 
     def parse_num(token, index):
+        assert isinstance(token.value, float)
         return astt.Number(token), index
 
     def parse_str(token, index):

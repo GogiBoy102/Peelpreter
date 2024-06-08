@@ -58,17 +58,16 @@ def evaluate(node: astt.Node, env: Enviroment, fname="stdin") -> obj.Object:
         return result
 
     def eval_blockstmt(block: astt.BlockStatement) -> obj.Object:
-        result: Union[obj.Object, None] = obj.Object()
+        result = obj.Object()
 
         for statement in block.statements:
             result = evaluate(statement, env)
 
-            if result is not None:
-                if (
-                    result.type() == obj.OBJ_RETURN_VALUE
-                    or result.type() == obj.OBJ_ERROR
-                ):
-                    return result
+            if (
+                result.type() == obj.OBJ_RETURN_VALUE
+                or result.type() == obj.OBJ_ERROR
+            ):
+                return result
 
         return result
 
