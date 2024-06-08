@@ -18,18 +18,19 @@
 #    along with this program.  If not, see <https://www.gnu.org/licenses/>.
 ########################################################################################
 
+from __future__ import annotations
 from .objectt import Object
 
 class Enviroment:
-    def __init__(self, outer) -> None:
+    def __init__(self, outer: "Enviroment") -> None:
         self.store: dict[str, Object] = dict()
         self.outer = outer
-    def get(self, name):
+    def get(self, name: str) -> Object | None:
         obj = self.store.get(name)
         if obj is None and self.outer is not None:
             obj = self.outer.get(name)
         return obj
-    def set_iden(self, name, value):
+    def set_iden(self, name: str, value: Object) -> Object:
         self.store[name] = value
         return value
     def __repr__(self) -> str:

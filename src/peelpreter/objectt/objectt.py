@@ -18,6 +18,8 @@
 #    along with this program.  If not, see <https://www.gnu.org/licenses/>.
 ########################################################################################
 
+from .. import astt
+
 OBJ_NUM = "OBJ_NUM"
 OBJ_STRING = "OBJ_STRING"
 OBJ_BOOLEAN = "OBJ_BOOLEAN"
@@ -64,7 +66,7 @@ class HashPair:
         return f"{self.value}"
 
 class Number(Hashable, Object):
-    def __init__(self, value) -> None:
+    def __init__(self, value: float) -> None:
         self.value = value
     def type(self) -> str:
         return OBJ_NUM
@@ -76,7 +78,7 @@ class Number(Hashable, Object):
         return self.inspect()
 
 class String(Hashable, Object):
-    def __init__(self, value) -> None:
+    def __init__(self, value: str) -> None:
         self.value = value
     def type(self) -> str:
         return OBJ_STRING
@@ -88,7 +90,7 @@ class String(Hashable, Object):
         return self.inspect()
 
 class Boolean(Hashable, Object):
-    def __init__(self, value) -> None:
+    def __init__(self, value: bool) -> None:
         self.value = value
     def type(self) -> str:
         return OBJ_BOOLEAN
@@ -100,7 +102,7 @@ class Boolean(Hashable, Object):
         return self.inspect()
 
 class ReturnValue(Object):
-    def __init__(self, value) -> None:
+    def __init__(self, value: Object) -> None:
         self.value = value
     def type(self) -> str:
         return OBJ_RETURN_VALUE
@@ -108,7 +110,7 @@ class ReturnValue(Object):
         return self.value.inspect()
 
 class Function(Object):
-    def __init__(self, parametres, body, env) -> None:
+    def __init__(self, parametres: list[astt.Identifier], body: astt.BlockStatement, env) -> None:
         self.parametres = parametres
         self.body = body
         self.env = env

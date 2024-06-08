@@ -79,7 +79,8 @@ class Number(Expression):
     def __init__(self, token: ttype.Token) -> None:
         super().__init__(token.string)
         self.token = token
-        self.value = token.value
+        assert isinstance(token.value, float)
+        self.value: float = token.value
 
     def __repr__(self) -> str:
         return self.literal

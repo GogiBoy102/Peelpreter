@@ -49,7 +49,7 @@ def tokenize(source: str, fname: str = "stdin") -> list[ttoken.Token]:
         tokens.append(ttoken.Token(ttoken.TT_NUM, source[position:index], float(source[position:index])))
         return index - 1
 
-    def handle_str(position, current, tokens, line, column):
+    def handle_str(position: int, current: str, tokens: list[ttoken.Token], line: int, column: int) -> int:
         start_pos = position
         position = advance(position)
         if position == -1:
@@ -67,7 +67,7 @@ def tokenize(source: str, fname: str = "stdin") -> list[ttoken.Token]:
         tokens.append(ttoken.Token(ttoken.TT_STRING, source[start_pos + 1:position], None))
         return position
 
-    def handle_indentifier(position, current, tokens):
+    def handle_indentifier(position: int, current: str, tokens: list[ttoken.Token]) -> int:
         index = position
         char = current
         while char.isalpha() or char == "_":
