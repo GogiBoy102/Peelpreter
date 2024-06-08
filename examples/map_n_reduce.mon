@@ -1,0 +1,30 @@
+let extend = fn(first_arr, second_arr, index) {
+    if (index == len(second_arr)) {
+        return null
+    }
+
+    push(first_arr, second_arr[index])
+    return extend(first_arr, second_arr, index + 1)
+}
+
+let map = fn(func, arr, index) {
+    if (index == len(arr) - 1) {
+        return [func(last(arr))]
+    }
+    let new_arr = [func(arr[index])]
+
+    extend(new_arr, map(func, arr, index + 1), 0)
+
+    return new_arr
+}
+
+let reduce = fn(func, arr, index) {
+    if (index == len(arr) - 1) {
+        return arr[index]
+    }
+    return func(arr[index], reduce(func, arr, index + 1))
+}
+
+let x = [8, 4, 1, 10]
+puts(map(fn(x){x * x}, x, 0))
+puts(reduce(fn(x, y){x + y}, x, 0))

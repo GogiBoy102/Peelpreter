@@ -1,8 +1,0 @@
-let sum = fn(arr, index) {
-    if (index == len(arr) - 1) {
-        return arr[index]
-    }
-    return arr[index] + sum(arr, index + 1)
-}
-
-puts(sum([1, 2, 3, 4, 5], 0))
