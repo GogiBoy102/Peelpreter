@@ -1,0 +1,11 @@
+let find = fn(arr, target, start) {
+    if (start == len(arr)) {
+        return -1
+    }
+    if (arr[start] == target) {
+        return start
+    }
+    return find(arr, target, start + 1)
+}
+
+puts(find([8, 9, 0], 9, 0))
