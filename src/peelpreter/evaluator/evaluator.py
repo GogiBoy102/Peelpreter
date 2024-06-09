@@ -156,8 +156,6 @@ def evaluate(node: astt.Node, env: Enviroment, fname="stdin") -> obj.Object:
         if istruthy(condition):
             return evaluate(ifelse.consequence, env)
         elif ifelse.alternative.literal != "if":
-            print(ifelse)
-            print(ifelse.alternative.literal)
             return evaluate(ifelse.alternative, env)
         else:
             return obj.NULL

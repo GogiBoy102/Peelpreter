@@ -1,0 +1,16 @@
+let count = fn(arr, counts, start) {
+    if (start == len(arr)) {
+        return counts
+    }
+    let char = arr[start]
+    if (counts[char] == null) {
+        let counts[char] = 1
+    }
+    else {
+        let counts[char] = counts[char] + 1
+    }
+    return count(arr, counts, start + 1)
+}
+
+let arr = ["h", "w", "w"]
+puts(count(arr, {}, 0))
