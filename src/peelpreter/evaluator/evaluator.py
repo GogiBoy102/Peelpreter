@@ -20,7 +20,6 @@
 
 from __future__ import annotations
 from sys import setrecursionlimit
-from typing import Union
 
 from .. import astt
 from ..objectt.enviroment import Enviroment
@@ -181,6 +180,9 @@ def evaluate(node: astt.Node, env: Enviroment, fname="stdin") -> obj.Object:
         if left.type() == obj.OBJ_ARRAY and indexexpr.type() == obj.OBJ_NUM:
             assert isinstance(left, obj.Array) and isinstance(indexexpr, obj.Number)
             return eval_arr_indexexpr(left, indexexpr)
+        elif left.type() == obj.OBJ_STRING and indexexpr.type() == obj.OBJ_NUM:
+            assert isinstance(left, obj.String) and isinstance(indexexpr, obj.Number)
+            return eval_str_indexexpr(left, indexexpr)
         elif left.type() == obj.OBJ_HASH:
             assert isinstance(left, obj.Hash)
             return eval_hash_indexexpr(left, indexexpr)
@@ -188,6 +190,14 @@ def evaluate(node: astt.Node, env: Enviroment, fname="stdin") -> obj.Object:
             return obj.Error(error.UnsupportedIndexType(fname, indexexpr, (-1, -1)))
         else:
             return obj.Error(error.UnsupportedIndexAccessType(fname, left, (-1, -1)))
+
+    def eval_str_indexexpr(string: obj.String, indexexpr: obj.Number) -> obj.String:
+        index = int(indexexpr.value)
+        maximum = len(string.value) - 1
+
+        if index < 0 or index > maximum:
+            return obj.String("")
+        return obj.String(string.value[index])
 
     def eval_hash_indexexpr(hash: obj.Hash, indexexpr: obj.Object) -> obj.Object:
         if not isinstance(indexexpr, obj.Hashable):
