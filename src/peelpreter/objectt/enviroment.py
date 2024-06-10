@@ -22,7 +22,7 @@ from __future__ import annotations
 from .objectt import Object
 
 class Enviroment:
-    def __init__(self, outer: "Enviroment") -> None:
+    def __init__(self, outer: "Enviroment | None") -> None:
         self.store: dict[str, Object] = dict()
         self.outer = outer
     def get(self, name: str) -> Object | None:
