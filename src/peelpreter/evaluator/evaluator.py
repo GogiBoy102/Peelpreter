@@ -160,7 +160,7 @@ def evaluate(node: astt.Node, env: Enviroment, fname="stdin") -> obj.Object:
             return obj.NULL
 
     def eval_hashlit(node: astt.HashLiteral, env: Enviroment) -> obj.Object:
-        pairs = dict()
+        pairs: dict[obj.HashKey, obj.HashPair] = dict()
 
         for key_node, val_node in node.pairs.items():
             key = evaluate(key_node, env)

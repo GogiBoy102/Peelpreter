@@ -18,9 +18,10 @@
 #    along with this program.  If not, see <https://www.gnu.org/licenses/>.
 ########################################################################################
 
-from typing import TYPE_CHECKING
+from typing import TYPE_CHECKING, Callable
 
 from .. import astt
+from .. import error
 
 if TYPE_CHECKING:
     from .enviroment import Enviroment
@@ -133,7 +134,7 @@ class Array(Object):
         return f"[{', '.join([element.inspect() for element in self.elements])}]"
 
 class Hash(Object):
-    def __init__(self, pairs) -> None:
+    def __init__(self, pairs: dict[HashKey, HashPair]) -> None:
         self.pairs = pairs
     def type(self) -> str:
         return OBJ_HASH
@@ -143,7 +144,7 @@ class Hash(Object):
         return self.inspect()
 
 class Builtin(Object):
-    def __init__(self, func) -> None:
+    def __init__(self, func: Callable) -> None:
         self.func = func
     def type(self) -> str:
         return OBJ_BUILTIN
@@ -159,7 +160,7 @@ class Null(Object):
         return self.inspect()
 
 class Error(Object):
-    def __init__(self, error) -> None:
+    def __init__(self, error: str | error.Error) -> None:
         self.error = error
     def type(self) -> str:
         return OBJ_ERROR
