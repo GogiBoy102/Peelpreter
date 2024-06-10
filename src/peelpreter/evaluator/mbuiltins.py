@@ -82,6 +82,7 @@ def m_tail(fname: str, args: list[obj.Object]) -> obj.Object:
     else:
         return obj.Error(error.UnsupportedType(fname, args[0], "tail", (-1, -1)))
 
+
 def m_head(fname: str, args: list[obj.Object]) -> obj.Object:
     if len(args) != 1:
         return arg_error(fname, 1, len(args), "head")
@@ -97,6 +98,7 @@ def m_head(fname: str, args: list[obj.Object]) -> obj.Object:
         return obj.String(head)
     else:
         return obj.Error(error.UnsupportedType(fname, args[0], "head", (-1, -1)))
+
 
 def m_first(fname: str, args: list[obj.Object]) -> obj.Object:
     if len(args) != 1:
@@ -114,6 +116,7 @@ def m_first(fname: str, args: list[obj.Object]) -> obj.Object:
     else:
         return obj.Error(error.UnsupportedType(fname, args[0], "first", (-1, -1)))
 
+
 def m_last(fname: str, args: list[obj.Object]) -> obj.Object:
     if len(args) != 1:
         return arg_error(fname, 1, len(args), "last")
@@ -129,6 +132,7 @@ def m_last(fname: str, args: list[obj.Object]) -> obj.Object:
         return obj.String(end)
     else:
         return obj.Error(error.UnsupportedType(fname, args[0], "last", (-1, -1)))
+
 
 def m_insert(fname: str, args: list[obj.Object]) -> obj.Object:
     if len(args) != 3:
@@ -146,6 +150,7 @@ def m_insert(fname: str, args: list[obj.Object]) -> obj.Object:
     arr.insert(int(args[1].value), args[2])
 
     return obj.Array(arr)
+
 
 def m_change(fname: str, args: list[obj.Object]) -> obj.Object:
     if len(args) != 3:

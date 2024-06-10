@@ -18,7 +18,12 @@
 #    along with this program.  If not, see <https://www.gnu.org/licenses/>.
 ########################################################################################
 
+from typing import TYPE_CHECKING
+
 from .. import astt
+
+if TYPE_CHECKING:
+    from .enviroment import Enviroment
 
 OBJ_NUM = "OBJ_NUM"
 OBJ_STRING = "OBJ_STRING"
@@ -110,7 +115,7 @@ class ReturnValue(Object):
         return self.value.inspect()
 
 class Function(Object):
-    def __init__(self, parametres: list[astt.Identifier], body: astt.BlockStatement, env) -> None:
+    def __init__(self, parametres: list[astt.Identifier], body: astt.BlockStatement, env: "Enviroment") -> None:
         self.parametres = parametres
         self.body = body
         self.env = env
@@ -120,7 +125,7 @@ class Function(Object):
         return f"fn({', '.join([repr(parametre) for parametre in self.parametres])}) {repr(self.body)}"
 
 class Array(Object):
-    def __init__(self, elements) -> None:
+    def __init__(self, elements: list[Object]) -> None:
         self.elements = elements
     def type(self) -> str:
         return OBJ_ARRAY
