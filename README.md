@@ -22,14 +22,14 @@ They are:-
 Some features which I wish for in a programming language are not present yet in this.
 Suppport for them will be slowly added ~as soon as type annotations are improved for the existing code base~.
 They are:-
-1. Input function [x]
-2. Type conversion [x]
-3. Constants [ ]
-4. Loops [ ]
-5. Structs [ ]
-6. Chaining variable assignments. E.g, `let x = y = 7` [ ]
-7. Import System [ ]
-8. Extension modules using Python [ ]
+- [x] Input function [x]
+- [x] Type conversion [x]
+- [ ] Constants
+- [ ] Loops
+- [ ] Structs
+- [ ] Chaining variable assignments. E.g, `let x = y = 7`
+- [ ] Import System
+- [ ] Extension modules using Python
 
 I might also added a Type Checker later on, but thats upto the future.
 
