@@ -44,7 +44,7 @@ class Object:
         return str()
 
 class HashKey:
-    def __init__(self, obj_type, value) -> None:
+    def __init__(self, obj_type: str, value: float | str) -> None:
         self.obj_type = obj_type
         self.value = value
     def __eq__(self, value: object) -> bool:
@@ -65,7 +65,7 @@ class Hashable:
         return HashKey("", int())
 
 class HashPair:
-    def __init__(self, key, value) -> None:
+    def __init__(self, key: Object, value: Object) -> None:
         self.key = key
         self.value = value
     def __repr__(self) -> str:
