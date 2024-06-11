@@ -19,6 +19,7 @@
 ########################################################################################
 
 from __future__ import annotations
+
 from .. import error
 from .. import objectt as obj
 
@@ -52,6 +53,13 @@ def m_puts(_: str, args: list[obj.Object]) -> obj.Object:
     print()
 
     return obj.NULL
+
+
+def m_input(fname: str, args: list[obj.Object]) -> obj.Object:
+    if len(args) != 1:
+        return arg_error(fname, 1, len(args), "input")
+    
+    return obj.String(input(args[0].inspect().replace('"', "")))
 
 
 def m_push(fname: str, args: list[obj.Object]) -> obj.Object:
@@ -170,10 +178,27 @@ def m_change(fname: str, args: list[obj.Object]) -> obj.Object:
     return obj.Array(arr)
 
 
+def m_num(fname: str, args: list[obj.Object]) -> obj.Object:
+    if len(args) != 1:
+        return arg_error(fname, 1, len(args), "num")
+
+    try:
+        return obj.Number(float(args[0].inspect().replace('"', "")))
+    except ValueError:
+        return obj.Error("Value error, couldnt convert to number")
+
+def m_str(fname: str, args: list[obj.Object]) -> obj.Object:
+    if len(args) != 1:
+        return arg_error(fname, 1, len(args), "str")
+    
+    return obj.String(args[0].inspect())
+
+
 builtins: dict[str, obj.Builtin] = {
     "len": obj.Builtin(m_len),
     "type": obj.Builtin(m_type),
     "puts": obj.Builtin(m_puts),
+    "input": obj.Builtin(m_input),
     "push": obj.Builtin(m_push),
     "tail": obj.Builtin(m_tail),
     "head": obj.Builtin(m_head),
@@ -181,4 +206,6 @@ builtins: dict[str, obj.Builtin] = {
     "last": obj.Builtin(m_last),
     "change": obj.Builtin(m_change),
     "insert": obj.Builtin(m_insert),
+    "num": obj.Builtin(m_num), 
+    "str": obj.Builtin(m_str)
 }
