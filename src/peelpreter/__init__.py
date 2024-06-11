@@ -22,4 +22,4 @@ from .objectt import Object as Object
 
 __author__ = "Jeebak Samajdwar"
 __license__ = "GPL"
-__version__ = "1.1.6"
+__version__ = "1.5.0"

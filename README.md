@@ -20,23 +20,25 @@ They are:-
 
 ### Features Planned to be added
 Some features which I wish for in a programming language are not present yet in this.
-Suppport for them will be added as soon as type annotations are improved for the existing code base.
+Suppport for them will be slowly added ~as soon as type annotations are improved for the existing code base~.
 They are:-
 1. Input function
 2. Type conversion
-3. Chaining variable assignments. E.g, `let x = y = 7`
 3. Constants
 4. Loops
 5. Structs
-6. Import System
-7. Extension modules using Python
+6. Chaining variable assignments. E.g, `let x = y = 7`
+7. Import System
+8. Extension modules using Python
+
+I might also added a Type Checker later on, but thats upto the future.
 
 ## Installation
 For installation of the package run,
 ```
 pip install peelpreter
 ```
-Or if you would prefer to build and install yourself, clone the repository and cd into it,
+Or if you would prefer to build and install yourself for a more up-to-date version, clone the repository and cd into it,
 ```
 git clone https://github.com/GogiBoy102/Peelpreter.git
 cd Peelpreter
