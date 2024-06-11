@@ -18,7 +18,8 @@
 #    along with this program.  If not, see <https://www.gnu.org/licenses/>.
 ########################################################################################
 
-from typing import Union
+from __future__ import annotations
+
 from ..error import Error
 
 TT_NUM = "TT_NUM"
@@ -71,7 +72,7 @@ keywords = {
 }
 
 class Token:
-    def __init__(self, ttype: str, string: str, value: Union[Error, float, None]) -> None:
+    def __init__(self, ttype: str, string: str, value: Error | float | None) -> None:
         self.ttype = ttype
         self.string = string
         self.value = value

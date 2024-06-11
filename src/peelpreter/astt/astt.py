@@ -19,7 +19,6 @@
 ########################################################################################
 
 from __future__ import annotations
-from typing import Union
 
 from .. import token_type as ttype
 
@@ -184,7 +183,7 @@ class LetStatement(Statement):
         return f"{self.literal} {self.name} = {self.value}"
 
 class IndexExpression(Expression):
-    def __init__(self, token: ttype.Token, left: Union[ArrayLiteral, HashLiteral], index: Expression) -> None:
+    def __init__(self, token: ttype.Token, left: ArrayLiteral | HashLiteral, index: Expression) -> None:
         super().__init__(token.string)
         self.token = token
         self.left = left

@@ -19,9 +19,7 @@
 ########################################################################################
 
 from __future__ import annotations
-from typing import Callable, Union
-
-from peelpreter.astt.astt import ArrayLiteral, BlockStatement, Expression, IndexExpression, Statement
+from typing import Callable
 
 from .. import astt
 from ..error import Error, NoPrefixFunc, UnexpectedEOF, UnexpectedToken
@@ -37,29 +35,29 @@ CALL = 7
 INDEX = 8
 
 
-def parse(tokens: list[ttoken.Token], fname="stdin"):
-    def advance(index):
+def parse(tokens: list[ttoken.Token], fname="stdin") -> tuple[astt.Program, list[Error]]:
+    def advance(index: int) -> int:
         return index + 1 if index + 1 != len(tokens) else index
 
-    def peek(index):
+    def peek(index: int) -> ttoken.Token:
         return (
             tokens[index + 1] if tokens[index].ttype != ttoken.TT_EOF else tokens[index]
         )
 
-    def get_precedence(token, precedences):
+    def get_precedence(token: ttoken.Token, precedences: dict[str, int]) -> int:
         if precedences.get(token.ttype) is not None:
             return precedences[token.ttype]
         return LOWEST
 
-    def parse_statement(token: ttoken.Token, index):
+    def parse_statement(token: ttoken.Token, index: int) -> tuple[astt.LetStatement | astt.ReassignmentStatement | astt.ReturnStatement | astt.ExpressionStatement | None, int]:
         if token.ttype == ttoken.TT_LET:
             return parse_let(token, index, errors)
         elif token.ttype == ttoken.TT_RETURN:
-            return parse_return(token, index, errors)
+            return parse_return(token, index)
         else:
-            return parse_statementexpr(token, index, errors)
+            return parse_statementexpr(token, index)
 
-    def parse_let(token, index, errors):
+    def parse_let(token: ttoken.Token, index: int, errors: list[Error]) -> tuple[astt.LetStatement | astt.ReassignmentStatement | None, int]:
         index = advance(index)
 
         if peek(index).ttype == ttoken.TT_ASSIGN:
@@ -69,7 +67,7 @@ def parse(tokens: list[ttoken.Token], fname="stdin"):
 
         return statement, index
 
-    def parse_assign(token, index, errors):
+    def parse_assign(token: ttoken.Token, index: int, errors: list[Error]) -> tuple[astt.LetStatement | None, int]:
         statement = astt.LetStatement(token, astt.Identifier(token), astt.Expression(""))
         
         token = tokens[index]
@@ -92,14 +90,14 @@ def parse(tokens: list[ttoken.Token], fname="stdin"):
 
         return statement, index
 
-    def parse_reassign(token, index, errors):
-        statement = astt.ReassignmentStatement(token, IndexExpression(token, ArrayLiteral(token, [Expression("")]), Expression("")), astt.Expression(""))
+    def parse_reassign(token: ttoken.Token, index: int, errors: list[Error]) -> tuple[astt.ReassignmentStatement | None, int]:
+        statement = astt.ReassignmentStatement(token, astt.IndexExpression(token, astt.ArrayLiteral(token, [astt.Expression("")]), astt.Expression("")), astt.Expression(""))
         
         token = tokens[index]
         index_expr, index = parse_expression(LOWEST, token, index)
 
         if index_expr is not None:
-            assert isinstance(index_expr, IndexExpression)
+            assert isinstance(index_expr, astt.IndexExpression)
             statement.index_expr = index_expr
         
         if peek(index).ttype != ttoken.TT_ASSIGN:
@@ -119,7 +117,7 @@ def parse(tokens: list[ttoken.Token], fname="stdin"):
 
         return statement, index
 
-    def parse_return(token, index, errors):
+    def parse_return(token: ttoken.Token, index: int) -> tuple[astt.ReturnStatement, int]:
         statment = astt.ReturnStatement(token, astt.Expression(""))
 
         index = advance(index)
@@ -135,7 +133,7 @@ def parse(tokens: list[ttoken.Token], fname="stdin"):
 
         return statment, index
 
-    def parse_block(token, index):
+    def parse_block(token: ttoken.Token, index: int) -> tuple[astt.BlockStatement, int]:
         block = astt.BlockStatement(token, [])
 
         index = advance(index)
@@ -150,7 +148,7 @@ def parse(tokens: list[ttoken.Token], fname="stdin"):
 
         return block, index
 
-    def parse_statementexpr(token, index, errors):
+    def parse_statementexpr(token: ttoken.Token, index: int) -> tuple[astt.ExpressionStatement, int]:
         statment = astt.ExpressionStatement(token, astt.Expression(""))
         expression, index = parse_expression(LOWEST, token, index)
         if expression is not None:
@@ -163,8 +161,8 @@ def parse(tokens: list[ttoken.Token], fname="stdin"):
         return statment, index
 
     def parse_expression(
-        precedence, token, index: int
-    ) -> tuple[Union[astt.Expression, None], int]:
+        precedence: int, token: ttoken.Token, index: int
+    ) -> tuple[astt.Expression | None, int]:
         parse_prefixfns: dict[str, Callable] = {
             ttoken.TT_IDEN: parse_identifier,
             ttoken.TT_NUM: parse_num,
@@ -229,7 +227,7 @@ def parse(tokens: list[ttoken.Token], fname="stdin"):
 
         return left_expr, index
 
-    def parse_prefixexpr(token, index):
+    def parse_prefixexpr(token: ttoken.Token, index: int) -> tuple[astt.PrefixExpression | None, int]:
         expression = astt.PrefixExpression(token, astt.Expression(""))
         index = advance(index)
         token = tokens[index]
@@ -244,7 +242,7 @@ def parse(tokens: list[ttoken.Token], fname="stdin"):
 
         return expression, index
 
-    def parse_infixexpr(precedences, leftexpr, token, index):
+    def parse_infixexpr(precedences: dict[str, int], leftexpr: astt.PrefixExpression, token: ttoken.Token, index: int) -> tuple[astt.InfixExpression | None, int]:
         expression = astt.InfixExpression(token, leftexpr, astt.Expression(""))
         precedence = get_precedence(token, precedences)
 
@@ -259,7 +257,7 @@ def parse(tokens: list[ttoken.Token], fname="stdin"):
 
         return expression, index
 
-    def parse_groupedexpr(token, index):
+    def parse_groupedexpr(token: ttoken.Token, index: int) -> tuple[astt.Expression | None, int]:
         index = advance(index)
         token = tokens[index]
 
@@ -275,9 +273,9 @@ def parse(tokens: list[ttoken.Token], fname="stdin"):
 
         return expression, index
 
-    def parse_ifexpr(token, index):
+    def parse_ifexpr(token: ttoken.Token, index: int) -> tuple[astt.IfExpression | None, int]:
         expression = astt.IfExpression(
-            token, astt.Expression(""), BlockStatement(token, [Statement("")]), BlockStatement(token, [Statement("")])
+            token, astt.Expression(""), astt.BlockStatement(token, [astt.Statement("")]), astt.BlockStatement(token, [astt.Statement("")])
         )
 
         if peek(index).ttype != ttoken.TT_LPAREN:
@@ -325,8 +323,8 @@ def parse(tokens: list[ttoken.Token], fname="stdin"):
 
         return expression, index
 
-    def parse_funcliteral(token, index):
-        expression = astt.FunctionLiteral(token, [], BlockStatement(token, [Statement("")]))
+    def parse_funcliteral(token: ttoken.Token, index: int) -> tuple[astt.FunctionLiteral | None, int]:
+        expression = astt.FunctionLiteral(token, [], astt.BlockStatement(token, [astt.Statement("")]))
 
         if peek(index).ttype != ttoken.TT_LPAREN:
             errors.append(
@@ -354,7 +352,7 @@ def parse(tokens: list[ttoken.Token], fname="stdin"):
 
         return expression, index
 
-    def parse_parametres(index):
+    def parse_parametres(index: int) -> tuple[list[astt.Identifier] | None, int]:
         identifiers = []
 
         if peek(index).ttype == ttoken.TT_RPAREN:
@@ -384,7 +382,7 @@ def parse(tokens: list[ttoken.Token], fname="stdin"):
 
         return identifiers, index
 
-    def parse_callexpr(precedences, function, token, index):
+    def parse_callexpr(precedences: dict[str, int], function: astt.FunctionLiteral, token: ttoken.Token, index: int) -> tuple[astt.CallExpression, int]:
         expression = astt.CallExpression(token, function, [])
         arguments, index = parse_exprlist(index, ttoken.TT_RPAREN)
 
@@ -393,7 +391,7 @@ def parse(tokens: list[ttoken.Token], fname="stdin"):
 
         return expression, index
 
-    def parse_hash_literal(token, index):
+    def parse_hash_literal(token: ttoken.Token, index: int) -> tuple[astt.HashLiteral | None, int]:
         hash_literal = astt.HashLiteral(token, dict())
 
         while peek(index).ttype != ttoken.TT_RBRACE:
@@ -430,7 +428,7 @@ def parse(tokens: list[ttoken.Token], fname="stdin"):
 
         return hash_literal, index
 
-    def parse_array_literal(token, index):
+    def parse_array_literal(token: ttoken.Token, index: int) -> tuple[astt.ArrayLiteral, int]:
         array = astt.ArrayLiteral(token, [])
 
         exprlist, index = parse_exprlist(index, ttoken.TT_RBRACKET)
@@ -439,7 +437,7 @@ def parse(tokens: list[ttoken.Token], fname="stdin"):
 
         return array, index
 
-    def parse_exprlist(index, end):
+    def parse_exprlist(index: int, end: str) -> tuple[list[astt.Expression] | None, int]:
         exprlist = []
 
         if peek(index).ttype == end:
@@ -477,7 +475,7 @@ def parse(tokens: list[ttoken.Token], fname="stdin"):
 
         return exprlist, index
 
-    def parse_indexexpr(precedences, left, token, index):
+    def parse_indexexpr(precedences: dict[str, int], left: astt.ArrayLiteral | astt.HashLiteral, token: ttoken.Token, index: int) -> tuple[astt.IndexExpression | None, int]:
         expression = astt.IndexExpression(token, left, astt.Expression(""))
         index = advance(index)
         token = tokens[index]
@@ -499,20 +497,20 @@ def parse(tokens: list[ttoken.Token], fname="stdin"):
 
         return expression, index
 
-    def parse_boolean(token, index):
+    def parse_boolean(token: ttoken.Token, index: int) -> tuple[astt.Boolean, int]:
         return astt.Boolean(token, token.ttype == ttoken.TT_TRUE), index
 
-    def parse_null(token, index):
+    def parse_null(token: ttoken.Token, index: int) -> tuple[astt.Null, int]:
         return astt.Null(token), index
 
-    def parse_num(token, index):
+    def parse_num(token: ttoken.Token, index: int) -> tuple[astt.Number, int]:
         assert isinstance(token.value, float)
         return astt.Number(token), index
 
-    def parse_str(token, index):
+    def parse_str(token: ttoken.Token, index: int) -> tuple[astt.String, int]:
         return astt.String(token), index
 
-    def parse_identifier(token, index):
+    def parse_identifier(token: ttoken.Token, index: int) -> tuple[astt.Identifier, int]:
         return astt.Identifier(token), index
 
     program = astt.Program([])
