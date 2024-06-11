@@ -22,8 +22,8 @@ They are:-
 Some features which I wish for in a programming language are not present yet in this.
 Suppport for them will be slowly added ~as soon as type annotations are improved for the existing code base~.
 They are:-
-1. Input function
-2. Type conversion
+~1. Input function~
+~2. Type conversion~
 3. Constants
 4. Loops
 5. Structs
