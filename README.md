@@ -24,7 +24,7 @@ Suppport for them will be slowly added ~as soon as type annotations are improved
 They are:-
 ~1. Input function~
 ~2. Type conversion~
-3. Constants
+1. Constants
 4. Loops
 5. Structs
 6. Chaining variable assignments. E.g, `let x = y = 7`
