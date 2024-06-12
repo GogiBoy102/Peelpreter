@@ -33,6 +33,11 @@ They are:-
 
 I might also added a Type Checker later on, but thats upto the future.
 
+### Changelog
+- 1.6.0: Added `input`, `num` and `str`.
+- 1.6.1: Fixed a bug which caused the interpreter to crash when a number was divided by zero
+
+
 ## Installation
 For installation of the package run,
 ```
