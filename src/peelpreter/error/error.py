@@ -43,6 +43,10 @@ class UnexpectedToken(Error):
     def __init__(self, fname: str, expected_token: str, got_token: str, location: tuple[int, int]) -> None:
         super().__init__(fname, "UnexpectedToken", f"expected token {expected_token}, got {got_token}", location)
 
+class ZeroDivision(Error):
+    def __init__(self, fname: str, num: float, location: tuple[int, int]) -> None:
+        super().__init__(fname, "ZeroDivision", f"Divided number, {num}, by zero", location)
+
 class NoPrefixFunc(Error):
     def __init__(self, fname: str, token: "Token", location: tuple[int, int]) -> None:
         super().__init__(fname, "NoPrefixFunc", f"no prefix function for parsing {token.string} found", location)

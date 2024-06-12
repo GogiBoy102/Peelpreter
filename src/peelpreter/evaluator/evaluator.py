@@ -109,6 +109,8 @@ def evaluate(node: astt.Node, env: Enviroment, fname="stdin") -> obj.Object:
         elif operator == "*":
             return obj.Number(leftval * rightval)
         elif operator == "/":
+            if not rightval:
+                return obj.Error(error.ZeroDivision(fname, leftval, (-1, -1)))
             return obj.Number(leftval / rightval)
         elif operator == "<":
             return obj.TRUE if leftval < rightval else obj.FALSE

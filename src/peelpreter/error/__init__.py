@@ -23,6 +23,7 @@ from .error import (
     IllegalCharErr as IllegalCharErr,
     UnexpectedToken as UnexpectedToken,
     NoPrefixFunc as NoPrefixFunc,
+    ZeroDivision as ZeroDivision,
     UnknownOperator as UnknownOperator,
     UnknownIdentifier as UnknownIdentifier,
     NotAFunction as NotAFunction,
