@@ -191,7 +191,7 @@ def m_str(fname: str, args: list[obj.Object]) -> obj.Object:
     if len(args) != 1:
         return arg_error(fname, 1, len(args), "str")
     
-    return obj.String(args[0].inspect())
+    return obj.String(args[0].inspect().replace('"', ""))
 
 
 builtins: dict[str, obj.Builtin] = {

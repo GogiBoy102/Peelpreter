@@ -25,6 +25,7 @@ They are:-
 - [x] Input function
 - [x] Type conversion
 - [ ] Constants
+- [ ] Optional Parameters
 - [ ] Loops
 - [ ] Structs
 - [ ] Chaining variable assignments. E.g, `let x = y = 7`
