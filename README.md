@@ -37,6 +37,7 @@ I might also added a Type Checker later on, but thats upto the future.
 ### Changelog
 - 1.6.0: Added `input`, `num` and `str`.
 - 1.6.1: Fixed a bug which caused the interpreter to crash when a number was divided by zero
+- 1.6.2: Fixed a bug with `str` which caused it to add double quotes (`"`) around a `String` object each time it was called on it
 
 
 ## Installation
