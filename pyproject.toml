@@ -6,6 +6,9 @@ build-backend = "setuptools.build_meta"
 name = "Peelpreter"
 description = "A interpreter written in Python for the language, Monkey"
 readme = "README.md"
+dependencies = [
+    "pyreadline3"
+]
 authors = [
     {name = "Jeebak Samajdwar"}
 ]
