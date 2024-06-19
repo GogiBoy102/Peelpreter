@@ -143,6 +143,17 @@ class IfExpression(Expression):
         result = f"if {self.condition} {self.consequence}{' else '+ repr(self.alternative) if self.alternative.literal != 'if' else ''}"
         return result
 
+class WhileExpression(Expression):
+    def __init__(self, token: ttype.Token, condition: Expression, body: BlockStatement) -> None:
+        super().__init__(token.string)
+        self.token = token
+        self.condition = condition
+        self.body = body
+
+    def __repr__(self) -> str:
+        result = f"while {self.condition} {self.body}"
+        return result
+
 class FunctionLiteral(Expression):
     def __init__(self, token: ttype.Token, parameters: list[Identifier], body: BlockStatement) -> None:
         super().__init__(token.string)
