@@ -61,22 +61,21 @@ def parse(tokens: list[ttoken.Token], fname="stdin") -> tuple[astt.Program, list
         index = advance(index)
 
         if peek(index).ttype == ttoken.TT_ASSIGN:
-            statement, index = parse_assign(token, index, errors)
-        else:
+            statement, index = parse_assign(token, index)
+        elif peek(index).ttype == ttoken.TT_RBRACE:
             statement, index = parse_reassign(token, index, errors)
+        else:
+            errors.append(UnexpectedToken(fname, "=", peek(index).string, (-1, -1)))
+            return None, index
 
         return statement, index
 
-    def parse_assign(token: ttoken.Token, index: int, errors: list[Error]) -> tuple[astt.LetStatement | None, int]:
+    def parse_assign(token: ttoken.Token, index: int) -> tuple[astt.LetStatement | None, int]:
         statement = astt.LetStatement(token, astt.Identifier(token), astt.Expression(""))
         
         token = tokens[index]
         statement.name = astt.Identifier(token)
         
-        if peek(index).ttype != ttoken.TT_ASSIGN:
-            errors.append(UnexpectedToken(fname, "=", peek(index).string, (-1, -1)))
-            return None, index
-
         index = advance(advance(index))
         token = tokens[index]
         value, index = parse_expression(LOWEST, token, index)
