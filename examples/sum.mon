@@ -1,0 +1,11 @@
+let arr = [1, 2, 3, 4, 5, 6, 7, 8, 9 ,10]
+
+let index = 0
+let sum = 0
+
+while (index != len(arr)) {
+    let sum = sum + arr[index]
+    let index = index + 1
+}
+
+puts(sum)
