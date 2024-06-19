@@ -21,6 +21,9 @@
 from __future__ import annotations
 from sys import setrecursionlimit
 
+from peelpreter.astt.astt import WhileExpression
+from peelpreter.objectt.objectt import Object
+
 from .. import astt
 from ..objectt.enviroment import Enviroment
 from .. import error
@@ -160,6 +163,19 @@ def evaluate(node: astt.Node, env: Enviroment, fname="stdin") -> obj.Object:
             return evaluate(ifelse.alternative, env)
         else:
             return obj.NULL
+
+    def eval_while_expr(while_node: astt.WhileExpression) -> obj.Object:
+        condition = evaluate(while_node.condition, env)
+        if is_error(condition):
+            return condition
+
+        result = obj.NULL
+
+        while istruthy(condition):
+            result = evaluate(while_node.body, env)
+            condition = evaluate(while_node.condition, env)
+
+        return result
 
     def eval_hashlit(node: astt.HashLiteral, env: Enviroment) -> obj.Object:
         pairs: dict[obj.HashKey, obj.HashPair] = dict()
@@ -336,6 +352,8 @@ def evaluate(node: astt.Node, env: Enviroment, fname="stdin") -> obj.Object:
         return eval_indexexpr(leftexpr, indexexpr)
     elif isinstance(node, astt.IfExpression):
         return eval_ifexpr(node)
+    elif isinstance(node, astt.WhileExpression):
+        return eval_while_expr(node)
     elif isinstance(node, astt.ReturnStatement):
         value = evaluate(node.valuexp, env)
         if is_error(value):
