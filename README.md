@@ -42,6 +42,8 @@ I might also added a Type Checker later on, but thats upto the future.
 - 1.6.0: Added `input`, `num` and `str`.
 - 1.6.1: Fixed a bug which caused the interpreter to crash when a number was divided by zero
 - 1.6.2: Fixed a bug with `str` which caused it to add double quotes (`"`) around a `String` object each time it was called on it
+- 1.7.0: Added `while` loops
+- 1.7.1: Fixed crash from missing a `=` in `let` statements
 
 
 ## Installation
