@@ -174,6 +174,7 @@ def parse(tokens: list[ttoken.Token], fname="stdin") -> tuple[astt.Program, list
             ttoken.TT_NULL: parse_null,
             ttoken.TT_LPAREN: parse_groupedexpr,
             ttoken.TT_IF: parse_ifexpr,
+            ttoken.TT_WHILE: parse_while_expr,
             ttoken.TT_FUNC: parse_funcliteral,
             ttoken.TT_LBRACKET: parse_array_literal,
             ttoken.TT_LBRACE: parse_hash_literal,
@@ -321,6 +322,40 @@ def parse(tokens: list[ttoken.Token], fname="stdin") -> tuple[astt.Program, list
             if alternative is not None:
                 expression.alternative = alternative
 
+        return expression, index
+    
+    def parse_while_expr(token: ttoken.Token, index: int) -> tuple[astt.WhileExpression | None, int]:
+        expression = astt.WhileExpression(token, astt.Expression(""), astt.BlockStatement(token, [astt.Statement("")]))
+
+        if peek(index).ttype != ttoken.TT_LPAREN:
+            errors.append(
+                UnexpectedToken(fname, ttoken.TT_LPAREN, peek(index).ttype, (-1, -1))
+            )
+            return None, index
+
+        index = advance(advance(index))
+        token = tokens[index]
+        condition, index = parse_expression(LOWEST, token, index)
+        if condition is not None:
+            expression.condition = condition
+        if peek(index).ttype != ttoken.TT_RPAREN:
+            errors.append(
+                UnexpectedToken(fname, ttoken.TT_RPAREN, peek(index).ttype, (-1, -1))
+            )
+            return None, index
+        index = advance(index)
+        token = tokens[index]
+        if peek(index).ttype != ttoken.TT_LBRACE:
+            errors.append(
+                UnexpectedToken(fname, ttoken.TT_LBRACE, peek(index).ttype, (-1, -1))
+            )
+            return None, index
+        index = advance(index)
+        token = tokens[index]
+        body, index = parse_block(token, index)
+        if condition is not None:
+            expression.body = body
+ 
         return expression, index
 
     def parse_funcliteral(token: ttoken.Token, index: int) -> tuple[astt.FunctionLiteral | None, int]:

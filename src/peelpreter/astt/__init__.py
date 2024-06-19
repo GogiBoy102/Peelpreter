@@ -31,6 +31,7 @@ from .astt import (
     PrefixExpression as PrefixExpression,
     InfixExpression as InfixExpression,
     IfExpression  as IfExpression,
+    WhileExpression as WhileExpression,
     FunctionLiteral as FunctionLiteral,
     ArrayLiteral as ArrayLiteral,
     HashLiteral as HashLiteral,
