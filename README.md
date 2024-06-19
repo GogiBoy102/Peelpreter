@@ -26,7 +26,8 @@ They are:-
 - [x] Type conversion
 - [ ] Constants
 - [ ] Optional Parameters
-- [ ] Loops
+- [x] While Loops
+- [ ] For Loops
 - [ ] Structs
 - [ ] Chaining variable assignments. E.g, `let x = y = 7`
 - [ ] Import System
