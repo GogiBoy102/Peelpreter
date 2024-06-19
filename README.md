@@ -28,6 +28,9 @@ They are:-
 - [ ] Optional Parameters
 - [x] While Loops
 - [ ] For Loops
+- [ ] Add New Keyword `list`.
+      This would cause loops to return an array of the results of the last expressions of each iteration of the loop 
+      instead of returning the result of the last expression of the last iteration of the loop.
 - [ ] Structs
 - [ ] Chaining variable assignments. E.g, `let x = y = 7`
 - [ ] Import System
