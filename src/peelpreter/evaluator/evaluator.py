@@ -21,9 +21,6 @@
 from __future__ import annotations
 from sys import setrecursionlimit
 
-from peelpreter.astt.astt import WhileExpression
-from peelpreter.objectt.objectt import Object
-
 from .. import astt
 from ..objectt.enviroment import Enviroment
 from .. import error
@@ -174,6 +171,21 @@ def evaluate(node: astt.Node, env: Enviroment, fname="stdin") -> obj.Object:
         while istruthy(condition):
             result = evaluate(while_node.body, env)
             condition = evaluate(while_node.condition, env)
+
+        return result
+
+    def eval_foreach_expr(for_node: astt.ForEachExpression, env: Enviroment) -> obj.Object:
+        iterator = evaluate(for_node.iterator, env)
+
+        if not isinstance(iterator, obj.Iterable):
+            return obj.Error("Not iterable")
+
+        loop_env = Enviroment(env)
+        
+        result = obj.NULL
+        for element in iterator.get_iterable():
+            loop_env.set_iden(for_node.var.literal, element)
+            result = evaluate(for_node.body, loop_env)
 
         return result
 
@@ -354,6 +366,8 @@ def evaluate(node: astt.Node, env: Enviroment, fname="stdin") -> obj.Object:
         return eval_ifexpr(node)
     elif isinstance(node, astt.WhileExpression):
         return eval_while_expr(node)
+    elif isinstance(node, astt.ForEachExpression):
+        return eval_foreach_expr(node, env)
     elif isinstance(node, astt.ReturnStatement):
         value = evaluate(node.valuexp, env)
         if is_error(value):
