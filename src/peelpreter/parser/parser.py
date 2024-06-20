@@ -62,7 +62,7 @@ def parse(tokens: list[ttoken.Token], fname="stdin") -> tuple[astt.Program, list
 
         if peek(index).ttype == ttoken.TT_ASSIGN:
             statement, index = parse_assign(token, index)
-        elif peek(index).ttype == ttoken.TT_RBRACE:
+        elif peek(index).ttype == ttoken.TT_LBRACKET:
             statement, index = parse_reassign(token, index, errors)
         else:
             errors.append(UnexpectedToken(fname, "=", peek(index).string, (-1, -1)))

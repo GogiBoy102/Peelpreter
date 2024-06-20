@@ -1,0 +1,19 @@
+let mult_str = fn(char, num) {
+    let index = 0
+    let result = ""
+
+    return while (!(index == num)) {
+              let index = index + 1
+              let result = result + char
+           }
+}
+
+let char = input("Enter what to repeat: ")
+let rows = num(input("Enter the number of rows: "))
+
+let row = 0
+while (!(row == rows)) {
+    let row = row + 1
+    puts(mult_str(char, row))
+}
+

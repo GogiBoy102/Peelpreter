@@ -1,0 +1,7 @@
+let arr = []
+let input_num = num(input("Enter number (0 to terminate): "))
+while (input_num != 0) {
+    push(arr, input_num)
+    let input_num = num(input("Enter number (0 to terminate): "))
+}
+puts(arr)
