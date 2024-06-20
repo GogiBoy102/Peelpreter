@@ -8,7 +8,7 @@ let mult_str = fn(char, num) {
            }
 }
 
-let char = "*"
+let char = input("Enter what to repeat: ")
 let rows = num(input("Enter the number of rows: "))
 
 let row = 0
