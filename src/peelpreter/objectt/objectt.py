@@ -73,6 +73,10 @@ class HashPair:
     def __repr__(self) -> str:
         return f"{self.value}"
 
+class Iterable:
+    def get_iterable(self) -> list[Object]:
+        return [Object()]
+
 class Number(Hashable, Object):
     def __init__(self, value: float) -> None:
         self.value = value
@@ -85,9 +89,11 @@ class Number(Hashable, Object):
     def __repr__(self) -> str:
         return self.inspect()
 
-class String(Hashable, Object):
+class String(Iterable, Hashable, Object):
     def __init__(self, value: str) -> None:
         self.value = value
+    def get_iterable(self) -> list[Object]:
+        return [String(char) for char in self.value]
     def type(self) -> str:
         return OBJ_STRING
     def inspect(self) -> str:
@@ -127,17 +133,21 @@ class Function(Object):
     def inspect(self) -> str:
         return f"fn({', '.join([repr(parametre) for parametre in self.parametres])}) {repr(self.body)}"
 
-class Array(Object):
+class Array(Iterable, Object):
     def __init__(self, elements: list[Object]) -> None:
         self.elements = elements
+    def get_iterable(self) -> list[Object]:
+        return self.elements
     def type(self) -> str:
         return OBJ_ARRAY
     def inspect(self) -> str:
         return f"[{', '.join([element.inspect() for element in self.elements])}]"
 
-class Hash(Object):
+class Hash(Iterable, Object):
     def __init__(self, pairs: dict[HashKey, HashPair]) -> None:
         self.pairs = pairs
+    def get_iterable(self) -> list[Object]:
+        return [Array([value.key, value.value]) for value in self.pairs.values()]
     def type(self) -> str:
         return OBJ_HASH
     def inspect(self) -> str:
