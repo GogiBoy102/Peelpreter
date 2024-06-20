@@ -32,6 +32,7 @@ from .astt import (
     InfixExpression as InfixExpression,
     IfExpression  as IfExpression,
     WhileExpression as WhileExpression,
+    ForEachExpression as ForEachExpression,
     FunctionLiteral as FunctionLiteral,
     ArrayLiteral as ArrayLiteral,
     HashLiteral as HashLiteral,
