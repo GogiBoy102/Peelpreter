@@ -45,6 +45,8 @@ I might also added a Type Checker later on, but thats upto the future.
 - 1.6.2: Fixed a bug with `str` which caused it to add double quotes (`"`) around a `String` object each time it was called on it
 - 1.7.0: Added `while` loops
 - 1.7.1: Fixed crash from missing a `=` in `let` statements
+- 1.7.2: Added `foreach` loops
+- 1.7.3: Fixed unintended behaviour of variables not being modified globally
 
 
 ## Installation

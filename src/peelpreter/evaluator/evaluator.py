@@ -174,18 +174,18 @@ def evaluate(node: astt.Node, env: Enviroment, fname="stdin") -> obj.Object:
 
         return result
 
-    def eval_foreach_expr(for_node: astt.ForEachExpression, env: Enviroment) -> obj.Object:
+    def eval_foreach_expr(for_node: astt.ForEachExpression) -> obj.Object:
         iterator = evaluate(for_node.iterator, env)
 
         if not isinstance(iterator, obj.Iterable):
             return obj.Error("Not iterable")
 
-        loop_env = Enviroment(env)
-        
         result = obj.NULL
         for element in iterator.get_iterable():
-            loop_env.set_iden(for_node.var.literal, element)
-            result = evaluate(for_node.body, loop_env)
+            env.set_iden(for_node.var.literal, element)
+            result = evaluate(for_node.body, env)
+
+        env.store.pop(for_node.var.literal, None)
 
         return result
 
@@ -367,7 +367,7 @@ def evaluate(node: astt.Node, env: Enviroment, fname="stdin") -> obj.Object:
     elif isinstance(node, astt.WhileExpression):
         return eval_while_expr(node)
     elif isinstance(node, astt.ForEachExpression):
-        return eval_foreach_expr(node, env)
+        return eval_foreach_expr(node)
     elif isinstance(node, astt.ReturnStatement):
         value = evaluate(node.valuexp, env)
         if is_error(value):
