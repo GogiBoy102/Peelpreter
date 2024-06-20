@@ -34,6 +34,7 @@ from ..token_type.token_type import (
     TT_IDEN as TT_IDEN,
     TT_IF as TT_IF,
     TT_WHILE as TT_WHILE,
+    TT_FOR as TT_FOR,
     TT_LBRACE as TT_LBRACE,
     TT_LBRACKET as TT_LBRACKET,
     TT_LET as TT_LET,

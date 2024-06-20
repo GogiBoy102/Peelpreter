@@ -56,6 +56,7 @@ TT_IF = "TT_IF"
 TT_ELSE = "TT_ELSE"
 TT_RETURN = "TT_RETURN"
 TT_WHILE = "TT_WHILE"
+TT_FOREACH = "TT_FOREACH"
 
 TT_NULL = "TT_NULL"
 TT_ERR = "TT_ERR"
@@ -70,7 +71,8 @@ keywords = {
     "if": TT_IF,
     "else": TT_ELSE,
     "return": TT_RETURN,
-    "while": TT_WHILE
+    "while": TT_WHILE,
+    "foreach": TT_FOREACH
 }
 
 class Token:
