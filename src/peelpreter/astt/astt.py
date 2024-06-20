@@ -19,6 +19,7 @@
 ########################################################################################
 
 from __future__ import annotations
+from collections.abc import Iterator
 
 from .. import token_type as ttype
 
@@ -152,6 +153,18 @@ class WhileExpression(Expression):
 
     def __repr__(self) -> str:
         result = f"while {self.condition} {self.body}"
+        return result
+
+class ForEachExpression(Expression):
+    def __init__(self, token: ttype.Token, iterator: Expression, var: Identifier, body: BlockStatement) -> None:
+        super().__init__(token.string)
+        self.token = token
+        self.iterator = iterator
+        self.var = var
+        self.body = body
+
+    def __repr__(self) -> str:
+        result =  f"foreach {self.var} in {self.iterator} {self.body}"
         return result
 
 class FunctionLiteral(Expression):
