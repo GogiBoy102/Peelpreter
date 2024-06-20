@@ -1,16 +1,17 @@
 # Monkey
-Peelpreter is a interpreter for the language Monkey specified in the book `Writing an Interpreter in Go`.
+Peelpreter is a interpreter based on the language Monkey specified in the book `Writing an Interpreter in Go`.
 It is not not designed to be the fastest implementation but instead a (mostly) readable one. 
 I, personally don't find encapsulating every little function of a program in classes to be particularly readable.
 Hence, I have kept things bare-bone functions where I thought it made sense and used classes to encapsulate data like C-Structs
 and sometimes to store methods.
 
-### Monkey Features
+### Features
 Peelpreter supports all features of the canon implementation as well as some more.
 They are:-
 1. Variables
 2. If expressions
 3. First-Class Functions
+4. Loops. Eg: `while` and `foreach`
 4. Closures
 5. Array
 6. Hash Map (Dictionary)
@@ -24,13 +25,13 @@ Suppport for them will be slowly added ~as soon as type annotations are improved
 They are:-
 - [x] Input function
 - [x] Type conversion
-- [ ] Constants
-- [ ] Optional Parameters
 - [x] While Loops
-- [ ] For Loops
+- [x] For Loops
 - [ ] Add New Keyword `list`.
       This would cause loops to return an array of the results of the last expressions of each iteration of the loop 
       instead of returning the result of the last expression of the last iteration of the loop.
+- [ ] Constants
+- [ ] Optional Parameters
 - [ ] Structs
 - [ ] Chaining variable assignments. E.g, `let x = y = 7`
 - [ ] Import System
