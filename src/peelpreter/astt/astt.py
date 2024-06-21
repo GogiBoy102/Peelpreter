@@ -205,6 +205,16 @@ class LetStatement(Statement):
     def __repr__(self) -> str:
         return f"{self.literal} {self.name} = {self.value}"
 
+class ConstStatement(Statement):
+    def __init__(self, token: ttype.Token, name: Identifier, value: Expression) -> None:
+        super().__init__(token.string)
+        self.token = token
+        self.name = name
+        self.value = value
+
+    def __repr__(self) -> str:
+        return f"{self.literal} {self.name} = {self.value}"
+
 class IndexExpression(Expression):
     def __init__(self, token: ttype.Token, left: ArrayLiteral | HashLiteral, index: Expression) -> None:
         super().__init__(token.string)
