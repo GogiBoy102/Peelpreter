@@ -24,6 +24,7 @@ from ..token_type.token_type import (
     TT_BANG as TT_BANG,
     TT_COLON as TT_COLON,
     TT_COMMA as TT_COMMA,
+    TT_CONST as TT_CONST,
     TT_ELSE as TT_ELSE,
     TT_EOF as TT_EOF,
     TT_EQ as TT_EQ,

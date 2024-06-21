@@ -49,6 +49,7 @@ TT_LBRACKET = "TT_LBRACKET"
 TT_RBRACKET = "TT_RBRACKET"
 
 TT_LET = "TT_LET"
+TT_CONST = "TT_CONST"
 TT_FUNC = "TT_FUNC"
 TT_TRUE = "TT_TRUE"
 TT_FALSE = "TT_FALSE"
@@ -66,6 +67,7 @@ TT_EOF = "TT_EOF"
 keywords = {
     "fn": TT_FUNC,
     "let": TT_LET,
+    "const": TT_CONST,
     "true": TT_TRUE,
     "false": TT_FALSE,
     "null": TT_NULL,
