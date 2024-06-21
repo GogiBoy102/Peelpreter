@@ -1,6 +1,15 @@
+### Contribution
+This is my first time having a public repo on github so I'm not sure on how to go on about this.
+If anyone would like to contribute they are free to open issue, where i will discuss it with them.
+
+### Contribution Suggestions
+Features on the [features to add](#features-planned-to-be-added) list, ones you think are missing and think should be there, etc. are all welcome.
+
+Adding a issue for the feature fist, where things could be decided whether the feature is add-able to the language or interpreter, would be appreciated though.
+
 # Monkey
 Peelpreter is a interpreter based on the language Monkey specified in the book `Writing an Interpreter in Go`.
-It is not not designed to be the fastest implementation but instead a (mostly) readable one. 
+It is not designed to be the fastest implementation but instead a (mostly) readable one. 
 I, personally don't find encapsulating every little function of a program in classes to be particularly readable.
 Hence, I have kept things bare-bone functions where I thought it made sense and used classes to encapsulate data like C-Structs
 and sometimes to store methods.
