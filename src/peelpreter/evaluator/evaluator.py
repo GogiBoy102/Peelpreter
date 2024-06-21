@@ -379,6 +379,12 @@ def evaluate(node: astt.Node, env: Enviroment, fname="stdin") -> obj.Object:
             return value
         env.set_iden(name=node.name.literal, value=value)
         return value
+    elif isinstance(node, astt.ConstStatement):
+        value = evaluate(node.value, env)
+        if is_error(value):
+            return value
+        env.add_const(node.name.literal, value)
+        return value
     elif isinstance(node, astt.ReassignmentStatement):
         structure = evaluate(node.index_expr.left, env)
         index = evaluate(node.index_expr.index, env)
