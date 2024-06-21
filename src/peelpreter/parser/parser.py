@@ -49,9 +49,11 @@ def parse(tokens: list[ttoken.Token], fname="stdin") -> tuple[astt.Program, list
             return precedences[token.ttype]
         return LOWEST
 
-    def parse_statement(token: ttoken.Token, index: int) -> tuple[astt.LetStatement | astt.ReassignmentStatement | astt.ReturnStatement | astt.ExpressionStatement | None, int]:
+    def parse_statement(token: ttoken.Token, index: int) -> tuple[astt.Statement | None, int]:
         if token.ttype == ttoken.TT_LET:
             return parse_let(token, index, errors)
+        elif token.ttype == ttoken.TT_CONST:
+            return parse_const(token, index)
         elif token.ttype == ttoken.TT_RETURN:
             return parse_return(token, index)
         else:
@@ -67,6 +69,25 @@ def parse(tokens: list[ttoken.Token], fname="stdin") -> tuple[astt.Program, list
         else:
             errors.append(UnexpectedToken(fname, "=", peek(index).string, (-1, -1)))
             return None, index
+
+        return statement, index
+
+    def parse_const(token: ttoken.Token, index: int) -> tuple[astt.ConstStatement | None, int]:
+        statement = astt.ConstStatement(token, astt.Identifier(token), astt.Expression(""))
+
+        token = tokens[index]
+        statement.name = astt.Identifier(token)
+        
+        index = advance(advance(index))
+        token = tokens[index]
+        value, index = parse_expression(LOWEST, token, index)
+
+        if value is not None:
+            statement.value = value
+        
+        if peek(index).ttype == ttoken.TT_SEMICOLON:
+            index = advance(index)
+            token = tokens[index]
 
         return statement, index
 

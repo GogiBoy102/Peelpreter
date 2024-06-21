@@ -37,6 +37,7 @@ from .astt import (
     ArrayLiteral as ArrayLiteral,
     HashLiteral as HashLiteral,
     LetStatement as LetStatement,
+    ConstStatement as ConstStatement,
     ReassignmentStatement as ReassignmentStatement,
     ReturnStatement as ReturnStatement,
     CallExpression as CallExpression,
