@@ -36,10 +36,11 @@ They are:-
 - [x] Type conversion
 - [x] While Loops
 - [x] For Loops
+- [x] Constants
 - [ ] Add New Keyword `list`.
       This would cause loops to return an array of the results of the last expressions of each iteration of the loop 
       instead of returning the result of the last expression of the last iteration of the loop.
-- [ ] Constants
+- [ ] Add New Keyword To Make Objects Immutable
 - [ ] Optional Parameters
 - [ ] Structs
 - [ ] Chaining variable assignments. E.g, `let x = y = 7`
@@ -56,7 +57,7 @@ I might also added a Type Checker later on, but thats upto the future.
 - 1.7.1: Fixed crash from missing a `=` in `let` statements
 - 1.7.2: Added `foreach` loops
 - 1.7.3: Fixed unintended behaviour of variables not being modified globally
-
+- 1.7.4: Added new keyword `const` for declaration of constants
 
 ## Installation
 For installation of the package run,
