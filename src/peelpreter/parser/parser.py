@@ -75,6 +75,7 @@ def parse(tokens: list[ttoken.Token], fname="stdin") -> tuple[astt.Program, list
     def parse_const(token: ttoken.Token, index: int) -> tuple[astt.ConstStatement | None, int]:
         statement = astt.ConstStatement(token, astt.Identifier(token), astt.Expression(""))
 
+        index = advance(index)
         token = tokens[index]
         statement.name = astt.Identifier(token)
         

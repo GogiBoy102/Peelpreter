@@ -93,3 +93,8 @@ class UnsupporteKeyType(Error):
 class UnknownNode(Error):
     def __init__(self, fname: str, location: tuple[int, int]) -> None:
         super().__init__(fname, "UnknownNode", "unknown ast node encountered", location)
+
+class ConstantAssignment(Error):
+    def __init__(self, fname: str, name: str, value: "Object", location: tuple[int, int]) -> None:
+        super().__init__(fname, "ConstantAssignment", f"invalid assignment {value} to const \"{name}\"", location)
+
