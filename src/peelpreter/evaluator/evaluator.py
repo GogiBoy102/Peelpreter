@@ -377,12 +377,16 @@ def evaluate(node: astt.Node, env: Enviroment, fname="stdin") -> obj.Object:
         value = evaluate(node.value, env)
         if is_error(value):
             return value
+        if node.name.literal in env.constants:
+            return obj.Error(error.ConstantAssignment(fname, node.name.literal, value, (-1, -1)))
         env.set_iden(name=node.name.literal, value=value)
         return value
     elif isinstance(node, astt.ConstStatement):
         value = evaluate(node.value, env)
         if is_error(value):
             return value
+        if node.name.literal in env.constants:
+            return obj.Error(error.ConstantAssignment(fname, node.name.literal, value, (-1, -1)))
         env.add_const(node.name.literal, value)
         return value
     elif isinstance(node, astt.ReassignmentStatement):

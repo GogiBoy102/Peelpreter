@@ -34,4 +34,5 @@ from .error import (
     UnsupportedIndexType as UnsupportedIndexType,
     UnsupporteKeyType as UnsupporteKeyType,
     UnknownNode as UnknownNode,
+    ConstantAssignment as ConstantAssignment
 )
